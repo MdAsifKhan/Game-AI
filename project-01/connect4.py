@@ -1,5 +1,6 @@
 import numpy as np
 import itertools
+import matplotlib.pyplot as plt
 
 #  1 --> R (Red)
 # -1 --> Y (Yellow)
@@ -10,7 +11,12 @@ symbols = {
      0:' '
 }
 
-
+# To track good moves
+penultimate_states = []
+winning_moves = []
+winning_player = []
+#winning_conf = []
+wins_losses_draws = []
 
 def move_still_possible(S):
     return not (S[S==0].size == 0)
@@ -31,7 +37,7 @@ def move_at_random(S, F, p):
     # Increment the count of pieces of in chosen column
     F[j] += 1
     
-    return S,F
+    return S,F, (i,j)
 
 
 def print_game_state(S):
@@ -84,14 +90,13 @@ def move_was_winning_move(S, p):
             if(c >= 4):
                 print("Diagonal")
                 return True
-            
+         
     return False
-    
     
 
 #if __name__ == '__main__':
 def play():
-    # initialize 3x3 tic tac toe board
+    # initialize 6x7 connect 4 board
     gameState = np.zeros((6,7), dtype=int)
     
     # to keep track of number of pieces each vertical column
@@ -110,8 +115,11 @@ def play():
         name = symbols[player]
         print('%s moves' % name)
 
+        # For storing previous game state and move in case of winning move
+        prev_gameState = gameState
+
         # let player move at random
-        gameState, colScore = move_at_random(gameState, colScores, player)
+        gameState, colScore, move = move_at_random(gameState, colScores, player)
 
         # print current game state
         print_game_state(gameState)
@@ -120,6 +128,10 @@ def play():
         # evaluate game state
         if move_was_winning_move(gameState, player):
             print('player %s wins after %d moves' % (name, mvcntr))
+            penultimate_states.append(prev_gameState)
+            winning_moves.append(move)
+            winning_player.append(player)
+            wins_losses_draws.append(player)
             noWinnerYet = False
 
         # switch player and increase move counter
@@ -129,9 +141,30 @@ def play():
 
 
     if noWinnerYet:
+        wins_losses_draws.append(0)
         print('game ended in a draw')
-        
-        
+
+
+# Plotting Histogram
+def plot_histogram(game_result):
+    #print(game_result)
+    plt.hist(game_result[game_result==1], label='R')
+    plt.hist(game_result[game_result==-1], label='Y')
+    plt.hist(game_result[game_result==0], label='draw')
+    plt.title('Histogram of Wins and Loss')
+    plt.xlabel('Value')
+    plt.ylabel('Frequency')
+    plt.legend(loc='upper right')
+    plt.show()
+
+def collect_stats():
+    for i in range(10):
+        play()
+    
+    print(wins_losses_draws)
+    plot_histogram(np.array(wins_losses_draws))
+
+   
 if __name__ == '__main__':
     #for i in range(1000):
-    play()
+    collect_stats()
