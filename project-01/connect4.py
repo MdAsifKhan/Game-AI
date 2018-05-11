@@ -91,7 +91,7 @@ def move_was_winning_move(S, p):
 
 #if __name__ == '__main__':
 def play():
-    # initialize 3x3 tic tac toe board
+    # initialize connect4 6x7 board
     gameState = np.zeros((6,7), dtype=int)
     
     # to keep track of number of pieces each vertical column
