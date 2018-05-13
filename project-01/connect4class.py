@@ -2,7 +2,7 @@ import numpy as np
 import itertools
 import matplotlib.pyplot as plt
 
-class connect4_data_model:
+class connect4class:
     """Models the game Connect 4 on a 6x7 board"""
     
     # Define color mapping as static class variables: 
@@ -177,5 +177,5 @@ class connect4_data_model:
         self.plot_histogram()
    
 if __name__ == '__main__':
-    model = connect4_data_model()
-    model.collect_stats(1000)
+    model = connect4class()
+    model.collect_stats(10)
