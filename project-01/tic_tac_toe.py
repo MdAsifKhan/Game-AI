@@ -76,8 +76,6 @@ def playGameRandomly(player):
 
 def randomTournament(start_player):
     # Count accross game states
-    wins_x = 0
-    wins_o = 0
     counts_x = np.zeros((3, 3))
     counts_o = np.zeros((3, 3))
     game_result = np.empty(1000)
@@ -87,14 +85,12 @@ def randomTournament(start_player):
         if winningPlayer == 1:
             gameState[gameState==-1] = 0
             counts_x += gameState
-            wins_x += 1
         elif winningPlayer == -1:
             gameState[gameState==1] = 0
             counts_o += np.abs(gameState)
-            wins_o += 1
         else:
             continue
-    return (game_result, counts_x, counts_o, wins_x, wins_o)
+    return (game_result, counts_x, counts_o)
     
 # Determine probabilites for states that contributed to a win.
 def determineWinMoveProbabilites(counts_x, counts_o):
@@ -320,8 +316,8 @@ if __name__ == '__main__':
     print("Heuristic Tournament")
 
     # Random Tournament
-    game_result, counts_x, counts_o, wins_x, wins_o = randomTournament(1)
-    plot = plot_histogram(game_result, "Random Tournament - Histogram of wins and loses", 1)
+    game_result, counts_x, counts_o = randomTournament(1)
+    plot_histogram(game_result, "Random Tournament - Histogram of wins and loses", 1)
 
     # Winning Probabilities Tournament
     probabilities_x, probabilities_o = determineWinMoveProbabilites(counts_x, counts_o)
