@@ -120,9 +120,8 @@ class connect4class:
                     return True
              
         return False
-    
-    def play(self):
-        while self.move_still_possible() and self.noWinnerYet:
+
+    def play_next_move(self):
             # get player symbol
             name = self.symbols[self.player]
             print('%s moves' % name)
@@ -147,13 +146,22 @@ class connect4class:
                 self.noWinnerYet = False
     
             # switch player and increase move counter
+            player = self.player
             self.player *= -1
             self.mvcntr +=  1
     
+            return move, player 
+    
+    def play(self):
+        while self.move_still_possible() and self.noWinnerYet:
+            self.play_next_move()
         if self.noWinnerYet:
             self.wins_losses_draws.append(0)
             print('game ended in a draw')
+        self.game_over = True
     
+    def is_gmae_over(self):
+        return not self.noWinnerYet
     
     # Plotting Histogram
     def plot_histogram(self):
