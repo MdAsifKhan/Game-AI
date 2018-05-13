@@ -1,13 +1,13 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
+import time as t
 
 def move_still_possible(S):
     return not (S[S==0].size == 0)
 
 def move_at_random(S, p):
     xs, ys = np.where(S==0)
-
     i = np.random.permutation(np.arange(xs.size))[0]
     
     S[xs[i],ys[i]] = p
@@ -76,6 +76,8 @@ def playGameRandomly(player):
 
 def randomTournament(start_player):
     # Count accross game states
+    wins_x = 0
+    wins_o = 0
     counts_x = np.zeros((3, 3))
     counts_o = np.zeros((3, 3))
     game_result = np.empty(1000)
@@ -85,12 +87,14 @@ def randomTournament(start_player):
         if winningPlayer == 1:
             gameState[gameState==-1] = 0
             counts_x += gameState
+            wins_x += 1
         elif winningPlayer == -1:
             gameState[gameState==1] = 0
             counts_o += np.abs(gameState)
+            wins_o += 1
         else:
             continue
-    return (game_result, counts_x, counts_o)
+    return (game_result, counts_x, counts_o, wins_x, wins_o)
     
 # Determine probabilites for states that contributed to a win.
 def determineWinMoveProbabilites(counts_x, counts_o):
@@ -292,13 +296,43 @@ def heuristic_tournament(start_player=1, number_games=1000):
     return game_result
 
 # Plotting Histogram
-def plot_histogram(game_result):
+def plot_histogram(game_result, title, figure):
     #print(game_result)
+    plt.figure(figure)
     plt.hist(game_result[game_result==1], label='x')
     plt.hist(game_result[game_result==-1], label='o')
     plt.hist(game_result[game_result==0], label='draw')
-    plt.title('Histogram of Wins and Loss')
+    plt.title(title)
     plt.xlabel('Value')
     plt.ylabel('Frequency')
     plt.legend(loc='upper right')
-    plt.show()
+
+    return plt
+
+if __name__ == '__main__':
+
+    seed = 88958
+    np.random.seed(seed=seed)
+
+    print("Three histograms would be plotted for the respective three tournaments.")
+    print("Random Tournament")
+    print("Winning Probabilities Tournament")
+    print("Heuristic Tournament")
+
+    # Random Tournament
+    game_result, counts_x, counts_o, wins_x, wins_o = randomTournament(1)
+    plot = plot_histogram(game_result, "Random Tournament - Histogram of wins and loses", 1)
+
+    # Winning Probabilities Tournament
+    probabilities_x, probabilities_o = determineWinMoveProbabilites(counts_x, counts_o)
+    probabilitiesFile = "probabilities.txt"
+    writeProbabilitiesToFile(probabilities_x, probabilities_o, probabilitiesFile)
+    game_result = winningProbabilitiesTournament(1, probabilitiesFile)
+    plot_histogram(game_result, "Winning Probabilities Tournament - Histogram of wins and loses", 2)
+
+    # Heuristic Tournament
+    game_result = heuristic_tournament()
+    plot = plot_histogram(game_result, "Heuristic Tournament - Histogram of wins and loses", 3)
+
+    plot.show()
+
