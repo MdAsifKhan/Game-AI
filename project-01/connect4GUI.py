@@ -127,9 +127,12 @@ def add_chip(move, player):
         image = image_yellow;
     chips.append(Chip(image, 0, start, destination))
 
+# Some flags for controlling the game loop:
+COUNT_ANIM = 0
+
 model = connect4class.connect4class()    
 getTicksLastFrame = pygame.time.get_ticks()
-simulation_speed = 1.0 # 1.0 is normal speed.
+simulation_speed = 10.0 # 1.0 is normal speed.
 running = True
 while running:
     # get the time delta to last frame in seconds.
@@ -155,9 +158,24 @@ while running:
         if chip.in_animation == True:
             any_chip_in_animation = True
     
-    if not any_chip_in_animation:    
-        move, player = model.play_next_move()
-        add_chip(move,player)    
+    if not any_chip_in_animation:
+        if not model.game_over:
+            move, player = model.play_next_move()
+            add_chip(move,player)
+        else:
+            if COUNT_ANIM == 0:
+                #TODO
+                COUNT_ANIM = COUNT_ANIM + 1
+            if COUNT_ANIM == 1:
+                # move chips from the board:
+                for chip in chips:
+                    chip.move_back_to_start()
+                COUNT_ANIM = COUNT_ANIM + 1
+            if COUNT_ANIM == 2:
+                chips = []
+                COUNT_ANIM = 0
+                model.plot_histogram()
+                model.start_new_game()            
     
     '''    
     for chip in chips:

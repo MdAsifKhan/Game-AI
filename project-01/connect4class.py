@@ -28,6 +28,9 @@ class connect4class:
     
         # initialize flag that indicates win
         self.noWinnerYet = True
+        
+        # this flag indicates if the game is over yet:
+        self.game_over = False
                 
     def reset_statistics(self):
         # To track good moves
@@ -144,6 +147,7 @@ class connect4class:
                 self.winning_player.append(self.player)
                 self.wins_losses_draws.append(self.player)
                 self.noWinnerYet = False
+                self.game_over = True
     
             # switch player and increase move counter
             player = self.player
@@ -160,8 +164,8 @@ class connect4class:
             print('game ended in a draw')
         self.game_over = True
     
-    def is_gmae_over(self):
-        return not self.noWinnerYet
+    def is_game_over(self):
+        return not self.game_over
     
     # Plotting Histogram
     def plot_histogram(self):
