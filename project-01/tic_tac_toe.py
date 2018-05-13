@@ -7,7 +7,6 @@ def move_still_possible(S):
 
 def move_at_random(S, p):
     xs, ys = np.where(S==0)
-
     i = np.random.permutation(np.arange(xs.size))[0]
     
     S[xs[i],ys[i]] = p
@@ -292,13 +291,43 @@ def heuristic_tournament(start_player=1, number_games=1000):
     return game_result
 
 # Plotting Histogram
-def plot_histogram(game_result):
+def plot_histogram(game_result, title, figure):
     #print(game_result)
+    plt.figure(figure)
     plt.hist(game_result[game_result==1], label='x')
     plt.hist(game_result[game_result==-1], label='o')
     plt.hist(game_result[game_result==0], label='draw')
-    plt.title('Histogram of Wins and Loss')
+    plt.title(title)
     plt.xlabel('Value')
     plt.ylabel('Frequency')
     plt.legend(loc='upper right')
-    plt.show()
+
+    return plt
+
+if __name__ == '__main__':
+
+    seed = 88958
+    np.random.seed(seed=seed)
+
+    print("Histograms would be plotted for the following tournaments.")
+    print("Random Tournament")
+    print("Winning Probabilities Tournament")
+    print("Heuristic Tournament")
+
+    # Random Tournament
+    game_result, counts_x, counts_o = randomTournament(1)
+    plot_histogram(game_result, "Random Tournament - Histogram of wins and loses", 1)
+
+    # Winning Probabilities Tournament
+    probabilities_x, probabilities_o = determineWinMoveProbabilites(counts_x, counts_o)
+    probabilitiesFile = "probabilities.txt"
+    writeProbabilitiesToFile(probabilities_x, probabilities_o, probabilitiesFile)
+    game_result = winningProbabilitiesTournament(1, probabilitiesFile)
+    plot_histogram(game_result, "Winning Probabilities Tournament - Histogram of wins and loses", 2)
+
+    # Heuristic Tournament
+    game_result = heuristic_tournament()
+    plot = plot_histogram(game_result, "Heuristic Tournament - Histogram of wins and loses", 3)
+
+    plot.show()
+
