@@ -40,8 +40,7 @@ def playGameWithWinningProbabilities(probabilities)
 ```
 
 ```python
-#Plays a tournament of 1000 games, using winning probabilites 
-for x while o moves randomly.
+#Plays a tournament of 1000 games, using winning probabilites for x while o moves randomly.
 def winningProbabilitiesTournament(probabilistic_player, file)
 ```
 
