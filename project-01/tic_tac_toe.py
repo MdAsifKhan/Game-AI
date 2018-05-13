@@ -309,7 +309,7 @@ if __name__ == '__main__':
     seed = 88958
     np.random.seed(seed=seed)
 
-    print("Three histograms would be plotted for the following three tournaments.")
+    print("Histograms would be plotted for the following tournaments.")
     print("Random Tournament")
     print("Winning Probabilities Tournament")
     print("Heuristic Tournament")
