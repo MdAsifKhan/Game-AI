@@ -16,7 +16,6 @@ penultimate_states = []
 winning_moves = []
 winning_player = []
 #winning_conf = []
-wins_losses_draws = []
 
 def move_still_possible(S):
     return not (S[S==0].size == 0)
@@ -47,7 +46,7 @@ def print_game_state(S):
     print(B)
 
 
-def move_was_winning_move(S, p):
+def move_was_winning_move(S, p, print_flag=True):
     c = 0
     
     # Checks for 4 consecutive pieces in horizontal rows
@@ -59,7 +58,7 @@ def move_was_winning_move(S, p):
             c = 0
             
         if(c >= 4):
-            print("Horizontal")
+            if print_flag: print("Horizontal")
             return True
     
     # Checks for 4 consecutive pieces in vertical rows
@@ -71,7 +70,7 @@ def move_was_winning_move(S, p):
             c = 0
             
         if(c >= 4):
-            print("Vertical")
+            if print_flag: print("Vertical")
             return True
     
     
@@ -88,7 +87,7 @@ def move_was_winning_move(S, p):
                 c = 0
                 
             if(c >= 4):
-                print("Diagonal")
+                if print_flag: print("Diagonal")
                 return True
          
     return False
@@ -96,7 +95,7 @@ def move_was_winning_move(S, p):
     
 
 #if __name__ == '__main__':
-def play():
+def play(print_flag=True):
     # initialize 6x7 connect 4 board
     gameState = np.zeros((6,7), dtype=int)
     
@@ -110,11 +109,11 @@ def play():
     # initialize flag that indicates win
     noWinnerYet = True
     
-
+    winner = 0
     while move_still_possible(gameState) and noWinnerYet:
         # get player symbol
         name = symbols[player]
-        print('%s moves' % name)
+        if print_flag: print('%s moves' % name)
 
         # For storing previous game state and move in case of winning move
         prev_gameState = gameState
@@ -123,27 +122,26 @@ def play():
         gameState, colScore, move = move_at_random(gameState, colScores, player)
 
         # print current game state
-        print_game_state(gameState)
+        if print_flag: print_game_state(gameState)
         # print(colScores)
         
         # evaluate game state
-        if move_was_winning_move(gameState, player):
-            print('player %s wins after %d moves' % (name, mvcntr))
+        if move_was_winning_move(gameState, player, print_flag):
+            if print_flag: print('player %s wins after %d moves' % (name, mvcntr))
             penultimate_states.append(prev_gameState)
             winning_moves.append(move)
             winning_player.append(player)
-            wins_losses_draws.append(player)
             noWinnerYet = False
+            winner = player
 
         # switch player and increase move counter
         player *= -1
         mvcntr +=  1
 
-
-
     if noWinnerYet:
-        wins_losses_draws.append(0)
-        print('game ended in a draw')
+        if print_flag: print('game ended in a draw')
+
+    return winner
 
 
 # Plotting Histogram
@@ -158,13 +156,12 @@ def plot_histogram(game_result):
     plt.legend(loc='upper right')
     plt.show()
 
-def collect_stats():
-    for i in range(10):
-        play()
+def random_tournament():
+    wins_losses_draws = np.empty(1000)
+    for i in range(1000):
+        wins_losses_draws[i] = play(print_flag=False)
     
-    print(wins_losses_draws)
-    plot_histogram(np.array(wins_losses_draws))
-
+    return wins_losses_draws
    
 if __name__ == '__main__':
     #for i in range(1000):
