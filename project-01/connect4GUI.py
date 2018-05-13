@@ -27,14 +27,12 @@ def load_image_and_scale(path, width, height):
     return image, rect
 
 # Show splash screen:
-'''
-splash_screen, splash_screen_rect = load_image_and_scale("splash_screen.jpg", width, height)
+splash_screen, splash_screen_rect = load_image_and_scale("splash_screen.jpg", 700, 700)
 splash_screen_rect.center = (width/2, height/2)
-screen.fill(WHITE)
+screen.fill(BLACK)
 screen.blit(splash_screen, splash_screen_rect)
 pygame.display.flip()
 time.sleep(2)
-'''
 
 ##### Setting up the board image:
 board_height = height
