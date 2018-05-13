@@ -33,33 +33,28 @@ screen = pygame.display.set_mode(size)
 
 model = connect4class.connect4class()
 
+def load_image_and_scale(path, width, height):
+    image = pygame.image.load(path)
+    image = pygame.transform.scale(image, (int(width), int(height) ))
+    rect  = image.get_rect()
+    return image, rect
+
 # Show splash screen:
-
-
-splash_screen = pygame.image.load("splash_screen.jpg")
-splash_screen = pygame.transform.scale(splash_screen, (width, height) )
-splash_screen_rect = splash_screen.get_rect()
+splash_screen, splash_screen_rect = load_image_and_scale("splash_screen.jpg", width, height)
 splash_screen_rect.center = (width/2, height/2)
-
-splash_screen.set_colorkey(COLOR_KEY)
-pygame.draw.circle(splash_screen, COLOR_KEY, [0, 0], 40)
 
 screen.fill(white)
 screen.blit(splash_screen, splash_screen_rect)
-#pygame.display.flip()
-#time.sleep(2)
-
+pygame.display.flip()
+time.sleep(2)
 
 ##### Setting up the board image:
 board_height = height
 cell_size = board_height / 6
 board_width = cell_size * 7
 
-board_image = pygame.image.load("trees.jpg")
-board_image = pygame.transform.scale(board_image, (int(board_width), int(board_height) ))
-board_rect  = board_image.get_rect()
+board_image, board_rect = load_image_and_scale("board.jpg", board_width, board_height)
 board_rect.center = (width/2, height/2)
-board_rect.topleft
 
 # Screen coordinates are given in (x,y) and board coordinates in (i,j)
 # (i,j) is (up, right)    matrix or array indices
@@ -68,53 +63,123 @@ y_coord_of_cell_i = np.linspace(cell_size/2, board_height - cell_size/2, 6)
 y_coord_of_cell_i = y_coord_of_cell_i[::-1]
 x_coord_of_cell_j = np.linspace(cell_size/2, board_width - cell_size/2, 7)
 
+def array_index_to_coordinates(i,j):
+    x = x_coord_of_cell_j[j]
+    y = y_coord_of_cell_i[i]
+    return [int(x), int(y)]
+
 # Create holes in the board:
+hole_radius = int( (cell_size/2) * 0.75 )
+
 board_image.set_colorkey(COLOR_KEY)
 for x in x_coord_of_cell_j:
     for y in y_coord_of_cell_i:
-        pygame.draw.circle(board_image, COLOR_KEY, [int(x), int(y)], 40)
+        pygame.draw.circle(board_image, COLOR_KEY, [int(x), int(y)], hole_radius)
+# Afterwards shift those values by the board position:
+x_coord_of_cell_j = x_coord_of_cell_j + board_rect.topleft[0]
+y_coord_of_cell_i = y_coord_of_cell_i + board_rect.topleft[1]
 
-#screen.fill(white)
-screen.blit(board_image, board_rect)
-pygame.display.flip()
+background_image, background_image_rect = load_image_and_scale("background.jpg", width, height)
+background_image_rect.center = (width/2, height/2)
 
-class chip():
-    #image_red = pygame.image.load("ball.gif")
-    #image_ = pygame.image.load("ball.gif")
-    
-    def __init__(self, player):
-        ## GAME STATE:
-        self.position = (0,0)
-        self.destination = (0,0)
+##### Create the chips:
+class Chip():
+    # Coordinates in this class are given in screen coordinates.
+    # start and destination or positions refering to the center of the chip.
+    def __init__(self, image, player, start, destination):
+        self.image = image
+        self.rect = image.get_rect()
+        self.start = start
+        self.destination = destination
+        self.position = start
         self.speed = 1.0
-        self.in_animation = False
-        
-        if player == 1:
-            self.image = 0
-        elif player == -1:
-            self.image = 0
-        
-    def update(self):
-        if(self.in_animation):
-            pass
+        self.in_animation = True
+        self.t = 0.0
+        self.speed = 1.0
 
+    def move_back_to_start(self):
+        self.destination = self.start
+        self.start = self.position
+        self.in_animation = True
+        
+    def move_to(self, destination):
+        self.destination = destination
+        self.start = self.position
+        self.in_animation = True
+        
+    def update(self, delta_time):
+        if(self.in_animation):
+            print(self.start)
+            print(self.destination)
+            self.t = self.t + delta_time
+            if self.t <= 1.0:
+                direction = self.destination - self.start
+                self.position = self.start + self.t*direction
+                print(self.position)
+            else:
+                self.t = 0.0
+                self.position = self.destination
+                print(self.position)
+                self.in_animation = False
+        
+    def draw(self):
+        self.rect.center = self.position
+        screen.blit(self.image, self.rect)
+        
+        
+chips = []
+chip_radius = (cell_size/2) * 0.80
+image_red,_ = load_image_and_scale("chip_red.png", chip_radius*2, chip_radius*2)
+image_yellow,_ = load_image_and_scale("chip_yellow.png", chip_radius*2, chip_radius*2)
+    
+def add_chip(i,j, player):
+    # cell is expected as (i,j) array index.
+
+    destination = np.asarray(array_index_to_coordinates(i,j))
+    start = np.array([destination[0], 0 - chip_radius])
+    player = -1
+    
+    if player == 1:
+        image = image_red;
+    elif player == -1:
+        image = image_yellow;
+    chips.append(Chip(image, 0, start, destination))
+
+i = 0
+j = 6
+player = -1 
+add_chip(i,j,player)
+
+i = 4
+j = 3
+player = 1
+add_chip(i,j,player)      
+    
+getTicksLastFrame = pygame.time.get_ticks()
 running = True
 while running:
+    # get the time delta to last frame in seconds.
+    t = pygame.time.get_ticks()
+    delta_time = (t - getTicksLastFrame) / 1000.0
+    getTicksLastFrame = t
+
     #events
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
-    
 
- #   ballrect = ballrect.move(speed)
-#    if ballrect.left < 0 or ballrect.right > width:
-#        speed[0] = -speed[0]
-#    if ballrect.top < 0 or ballrect.bottom > height:
-        #speed[1] = -speed[1]
-
-    #screen.fill(black)
-#    screen.blit(ball, ballrect)
-    #pygame.display.flip()
+    screen.fill(white)
+    screen.blit(background_image, background_image_rect)     
+    for chip in chips:
+        chip.update(delta_time)
+        chip.draw()
+        
+    for chip in chips:
+        if not chip.in_animation:
+            chip.move_back_to_start()
+        
+    screen.blit(board_image, board_rect)
+    pygame.display.flip()
  
 pygame.quit()
             
