@@ -1,7 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
-import time as t
 
 def move_still_possible(S):
     return not (S[S==0].size == 0)
@@ -310,7 +309,7 @@ if __name__ == '__main__':
     seed = 88958
     np.random.seed(seed=seed)
 
-    print("Three histograms would be plotted for the respective three tournaments.")
+    print("Three histograms would be plotted for the following three tournaments.")
     print("Random Tournament")
     print("Winning Probabilities Tournament")
     print("Heuristic Tournament")
