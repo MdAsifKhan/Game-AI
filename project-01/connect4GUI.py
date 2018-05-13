@@ -132,7 +132,7 @@ COUNT_ANIM = 0
 
 model = connect4class.connect4class()    
 getTicksLastFrame = pygame.time.get_ticks()
-simulation_speed = 10.0 # 1.0 is normal speed.
+simulation_speed = 1.0 # 1.0 is normal speed.
 running = True
 while running:
     # get the time delta to last frame in seconds.
@@ -159,7 +159,7 @@ while running:
             any_chip_in_animation = True
     
     if not any_chip_in_animation:
-        if not model.game_over:
+        if not model.is_game_over():
             move, player = model.play_next_move()
             add_chip(move,player)
         else:

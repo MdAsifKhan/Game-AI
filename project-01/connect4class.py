@@ -153,19 +153,23 @@ class connect4class:
             player = self.player
             self.player *= -1
             self.mvcntr +=  1
+            
+            # Check if there will be another move in this round or if the round is over:
+            if self.move_still_possible() and self.noWinnerYet:
+                pass
+            elif not self.move_still_possible() and self.noWinnerYet:
+                self.wins_losses_draws.append(0)
+                print('game ended in a draw') 
+                self.game_over = True            
     
             return move, player 
     
     def play(self):
-        while self.move_still_possible() and self.noWinnerYet:
+        while not self.is_game_over():
             self.play_next_move()
-        if self.noWinnerYet:
-            self.wins_losses_draws.append(0)
-            print('game ended in a draw')
-        self.game_over = True
-    
+        
     def is_game_over(self):
-        return not self.game_over
+        return self.game_over
     
     # Plotting Histogram
     def plot_histogram(self):
