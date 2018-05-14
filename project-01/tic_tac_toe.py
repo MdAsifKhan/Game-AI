@@ -290,6 +290,24 @@ def heuristic_tournament(start_player=1, number_games=1000):
 
     return game_result
 
+
+# Plot Heatmap
+def plot_heatmap(data):
+    #plt.imshow(win_configs, cmap='hot', interpolation='nearest')
+
+    heatmap = plt.pcolor(data)
+
+    for y in range(data.shape[0]):
+        for x in range(data.shape[1]):
+            plt.text(x + 0.5, y + 0.5, '%.4f' % data[y, x],
+                     horizontalalignment='center',
+                     verticalalignment='center',
+                     )
+
+    plt.colorbar(heatmap)
+    plt.show()
+
+
 # Plotting Histogram
 def plot_histogram(game_result, title, figure):
     #print(game_result)
@@ -316,10 +334,13 @@ if __name__ == '__main__':
 
     # Random Tournament
     game_result, counts_x, counts_o = randomTournament(1)
-    plot_histogram(game_result, "Random Tournament - Histogram of wins and loses", 1)
-
+    #plot_histogram(game_result, "Random Tournament - Histogram of wins and loses", 1)
+    
+    plot_heatmap(counts_x/np.sum(game_result[game_result==1]))
+    '''
     # Winning Probabilities Tournament
     probabilities_x, probabilities_o = determineWinMoveProbabilites(counts_x, counts_o)
+    
     probabilitiesFile = "probabilities.txt"
     writeProbabilitiesToFile(probabilities_x, probabilities_o, probabilitiesFile)
     game_result = winningProbabilitiesTournament(1, probabilitiesFile)
@@ -330,4 +351,4 @@ if __name__ == '__main__':
     plot = plot_histogram(game_result, "Heuristic Tournament - Histogram of wins and loses", 3)
 
     plot.show()
-
+    '''

@@ -16,6 +16,8 @@ penultimate_states = []
 winning_moves = []
 winning_player = []
 #winning_conf = []
+wins_losses_draws = []
+
 
 def move_still_possible(S):
     return not (S[S==0].size == 0)
@@ -46,7 +48,7 @@ def print_game_state(S):
     print(B)
 
 
-def move_was_winning_move(S, p, print_flag=True):
+def move_was_winning_move(S, p):
     c = 0
     
     # Checks for 4 consecutive pieces in horizontal rows
@@ -58,7 +60,7 @@ def move_was_winning_move(S, p, print_flag=True):
             c = 0
             
         if(c >= 4):
-            if print_flag: print("Horizontal")
+            print("Horizontal")
             return True
     
     # Checks for 4 consecutive pieces in vertical rows
@@ -70,7 +72,7 @@ def move_was_winning_move(S, p, print_flag=True):
             c = 0
             
         if(c >= 4):
-            if print_flag: print("Vertical")
+            print("Vertical")
             return True
     
     
@@ -87,7 +89,7 @@ def move_was_winning_move(S, p, print_flag=True):
                 c = 0
                 
             if(c >= 4):
-                if print_flag: print("Diagonal")
+                print("Diagonal")
                 return True
          
     return False
@@ -95,7 +97,7 @@ def move_was_winning_move(S, p, print_flag=True):
     
 
 #if __name__ == '__main__':
-def play(print_flag=True):
+def play():
     # initialize 6x7 connect 4 board
     gameState = np.zeros((6,7), dtype=int)
     
@@ -109,11 +111,11 @@ def play(print_flag=True):
     # initialize flag that indicates win
     noWinnerYet = True
     
-    winner = 0
+
     while move_still_possible(gameState) and noWinnerYet:
         # get player symbol
         name = symbols[player]
-        if print_flag: print('%s moves' % name)
+        print('%s moves' % name)
 
         # For storing previous game state and move in case of winning move
         prev_gameState = gameState
@@ -122,26 +124,47 @@ def play(print_flag=True):
         gameState, colScore, move = move_at_random(gameState, colScores, player)
 
         # print current game state
-        if print_flag: print_game_state(gameState)
+        print_game_state(gameState)
         # print(colScores)
         
         # evaluate game state
-        if move_was_winning_move(gameState, player, print_flag):
-            if print_flag: print('player %s wins after %d moves' % (name, mvcntr))
+        if move_was_winning_move(gameState, player):
+            print('player %s wins after %d moves' % (name, mvcntr))
             penultimate_states.append(prev_gameState)
             winning_moves.append(move)
             winning_player.append(player)
+            wins_losses_draws.append(player)
             noWinnerYet = False
-            winner = player
+            
+            return gameState, player
 
         # switch player and increase move counter
         player *= -1
         mvcntr +=  1
 
-    if noWinnerYet:
-        if print_flag: print('game ended in a draw')
 
-    return winner
+    if noWinnerYet:
+        player = 0
+        wins_losses_draws.append(0)
+        print('game ended in a draw')
+        
+    return gameState, player
+
+
+def plot_heatmap(data):
+    #plt.imshow(win_configs, cmap='hot', interpolation='nearest')
+    #data = win_configs/np.max(win_configs)
+    heatmap = plt.pcolor(data)
+
+    for y in range(data.shape[0]):
+        for x in range(data.shape[1]):
+            plt.text(x + 0.5, y + 0.5, '%.4f' % data[y, x],
+                     horizontalalignment='center',
+                     verticalalignment='center',
+                     )
+
+    plt.colorbar(heatmap)
+    plt.show()
 
 
 # Plotting Histogram
@@ -156,12 +179,30 @@ def plot_histogram(game_result):
     plt.legend(loc='upper right')
     plt.show()
 
-def random_tournament():
-    wins_losses_draws = np.empty(1000)
+def collect_stats():
+    win_configs = np.zeros((6,7), dtype=int)
+    # win_configs_p2 = np.zeros((6,7), dtype=int)
     for i in range(1000):
-        wins_losses_draws[i] = play(print_flag=False)
+
+        g, p = play()
+        count = 0
+        if p!= 0:
+            if p==1:
+                g[g==-1]=0
+                #np.add(win_configs_p2, g)
+            else:
+                g[g==1]=0
+                #np.add(win_configs_p1, np.abs(g))
+        
+        win_configs = win_configs + g
+            
+
     
-    return wins_losses_draws
+    win_configs = win_configs/1000
+    print(win_configs)
+    plot_histogram(np.array(wins_losses_draws))
+    plot_heatmap(win_configs)
+
    
 if __name__ == '__main__':
     #for i in range(1000):
