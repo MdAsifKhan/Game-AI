@@ -171,6 +171,13 @@ class connect4class:
     def is_game_over(self):
         return self.game_over
     
+    def get_game_score(self):
+        game_result = np.array(self.wins_losses_draws)
+        Red = np.size(game_result[game_result==1])
+        Yellow = np.size(game_result[game_result==-1])
+        Draw = np.size(game_result[game_result==0])
+        return Red, Yellow, Draw 
+    
     # Plotting Histogram
     def plot_histogram(self):
         game_result = np.array(self.wins_losses_draws)
