@@ -101,7 +101,7 @@ def print_game_state(S):
         B[B==n] = symbols[n]
     print(B)
 
-def play_game(player, strategy):
+def play_game_heuristic(player):
     # initialize 3x3 tic tac toe board
     gameState = np.zeros((3,3), dtype=int)
     # initialize, move counter
@@ -144,17 +144,16 @@ def plot_histogram(game_result):
     plt.legend(loc='upper right')
     plt.show()
 
-def game_simulate(simulation, strategy, hist):
+def play_game_heuristic_tournament(number_games=1000):
 
     start_player = 1
-    game_result = np.empty(simulation)
-    for game_count in range(simulation):  
-        print('Game {}'.format(game_count+1))
-        result = play_game(start_player, strategy)
+    game_result = np.empty(number_games)
+    for game_count in range(number_games):  
+        #print('Game {}'.format(game_count+1))
+        result = play_game_heuristic(start_player)
         game_result[game_count] = result
-    if hist:
-        plot_histogram(game_result)
 
+    return game_result
 if __name__ == '__main__':
 
     #game_result = {'o':0,'x':0,'Draw':0}
@@ -165,10 +164,10 @@ if __name__ == '__main__':
     game_simulate(simulation, strategy, hist=True)
     """
     # Part 1.2.2
-    simulation = 1000
-    strategy = 'heuristic'
-    game_simulate(simulation, strategy, hist=True)
-        
+    number_games=1000
+    game_result = play_game_heuristic_tournament(number_games)
+    plot_histogram(game_result)
+    
         
         
 
