@@ -138,6 +138,7 @@ class connect4class:
             # print current game state
             self.print_game_state()
             # print(colScores)
+            print(self.gameState.tolist())
             
             # evaluate game state
             if self.move_was_winning_move():
