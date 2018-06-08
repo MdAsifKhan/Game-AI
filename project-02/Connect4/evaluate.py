@@ -82,7 +82,13 @@ def evaluate(gameState, player=1):
 
 #%%
 def test1337evaluate():
-    gameState_list = [[0, -1, 1, -1, -1, 1, -1], [0, 1, 1, 0, 1, -1, 0], [0, -1, -1, 0, 1, 1, 0], [0, 0, 1, 0, 0, 0, 0], [0, 0, -1, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0]]
+    gameState_list = \
+    [[0  ,-1 ,1  ,-1 ,-1 , 1 ,-1 ], \
+    [0  ,1  ,1  ,1  ,1  ,-1 ,0  ], \
+    [0  ,-1 ,-1 ,0  ,1  ,1  ,0  ], \
+    [0  ,0  ,1  ,0  ,0  ,0  ,0  ], \
+    [0  ,0  ,-1 ,0  ,0  ,0  ,0  ], \
+    [0  ,0  ,0  ,0  ,0  ,0  ,0  ]]
     gameState = np.array(gameState_list)
     result = evaluate(gameState)
     print(result)

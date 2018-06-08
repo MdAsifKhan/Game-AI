@@ -6,10 +6,13 @@ Created on Fri May 11 19:35:15 2018
 @author: Daniel Biskup
 """
 
-import sys, pygame
+import pygame
 import time
 import connect4class
 import numpy as np
+
+SIMULATION_SPEED = 10.0
+SPLASH_SCREEN_TIME = 0.0
 
 pygame.init()
 
@@ -32,7 +35,7 @@ splash_screen_rect.center = (width/2, height/2)
 screen.fill(BLACK)
 screen.blit(splash_screen, splash_screen_rect)
 pygame.display.flip()
-time.sleep(2)
+time.sleep(SPLASH_SCREEN_TIME)
 
 
 ##### Setting up the board image:
@@ -138,7 +141,7 @@ myfont = pygame.font.SysFont('Comic Sans', 40)
 
 model = connect4class.connect4class()    
 getTicksLastFrame = pygame.time.get_ticks()
-simulation_speed = 1.0 # 1.0 is normal speed.
+simulation_speed = SIMULATION_SPEED # 1.0 is normal speed.
 running = True
 while running:
     # get the time delta to last frame in seconds.
@@ -173,11 +176,27 @@ while running:
             if event.key == pygame.K_0:
                 simulation_speed = 0.0
 
+    # Draw everythin:
     screen.fill(WHITE)
     screen.blit(background_image, background_image_rect)     
     for chip in chips:
         chip.update(delta_time)
         chip.draw()
+    screen.blit(board_image, board_rect)
+    # Draw the Score:
+    screen.blit(score_image, score_image_rect)
+    Red, Yellow, Draw = model.get_game_score()
+    TextColor = (0, 255, 0)
+    textRed = myfont.render('Red: ' + str(Red), False, TextColor)
+    textYellow = myfont.render('Yellow: ' + str(Yellow), False, TextColor)
+    textDraw = myfont.render('Draw: ' + str(Draw), False, TextColor)
+    text_x = 10
+    text_y = 10
+    text_offset = 30
+    screen.blit(textRed,(text_x ,text_y + text_offset*0))
+    screen.blit(textYellow,(text_x ,text_y + text_offset*1))
+    screen.blit(textDraw,(text_x ,text_y + text_offset*2))
+    pygame.display.flip()
     
     # Check if any chip is in animation right now:
     any_chip_in_animation = False
@@ -205,22 +224,7 @@ while running:
                 model.plot_histogram()
                 model.start_new_game()            
 
-    screen.blit(board_image, board_rect)
 
-    # Draw the Score:
-    screen.blit(score_image, score_image_rect)
-    Red, Yellow, Draw = model.get_game_score()
-    TextColor = (0, 255, 0)
-    textRed = myfont.render('Red: ' + str(Red), False, TextColor)
-    textYellow = myfont.render('Yellow: ' + str(Yellow), False, TextColor)
-    textDraw = myfont.render('Draw: ' + str(Draw), False, TextColor)
-    text_x = 10
-    text_y = 10
-    text_offset = 30
-    screen.blit(textRed,(text_x ,text_y + text_offset*0))
-    screen.blit(textYellow,(text_x ,text_y + text_offset*1))
-    screen.blit(textDraw,(text_x ,text_y + text_offset*2))
-    pygame.display.flip()
  
 pygame.quit()
             
