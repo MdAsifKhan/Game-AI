@@ -83,7 +83,7 @@ class connect4class:
             # For storing previous game state and move in case of winning move
             prev_gameState = self.gameState
             
-            players_to_use_MinMax = [1]
+            players_to_use_MinMax = [1,-1] # can be [], [-1], [1] or [-1,1]
             if (self.player in players_to_use_MinMax):  # let player 1 move according to MinMax
                 reward, move = calculate_minmax_move(self.gameState, max_depth=4, player=1)
                 self.gameState[move] = self.player

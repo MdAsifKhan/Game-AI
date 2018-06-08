@@ -18,7 +18,7 @@ gameState = np.array(gameState_list)
 # TODO: Depth
 # TODO: player
 
-def terminal_value(gameState, player_who_caused_this_state):
+def terminal_value(gameState, player_who_caused_this_state, depth=0):
     '''
     player_who_caused_this_state is MAX or MIN represented by 1 and -1 respectively.
     Returns the value of a terminal game state
@@ -28,10 +28,10 @@ def terminal_value(gameState, player_who_caused_this_state):
     if move_was_winning_move(gameState):
         #Win:
         if player_who_caused_this_state == 1:
-            value = 1000
+            value = 1000 #-depth
         #Loss
         else:
-            value = -1000
+            value = -1000 #+depth
     #Draw:
     else:
         value = 500
@@ -50,6 +50,30 @@ def possible_next_game_states(gameState, player=1):
         new_gameState[move] = player
         next_states.append(new_gameState)
     return next_states, possible
+
+def rand_argmin(a):
+    'Randomly returns the index of one of multiple minimum numbers in an array'
+    ## Test Data:
+    '''    
+    moves = [(2, 0), (1, 1), (0, 2), (0, 3), (0, 4), (1, 5), (0, 6)]
+    rewards = [-5, -6, -4, -2, -3, -2, -6]
+    
+    moves = [(4, 0), (0, 1), (0, 2), (0, 3), (0, 4), (2, 5), (0, 6)]
+    rewards = [-3, -4, -5, -4, -3, -2, -4]
+    #Player R moves using MinMax to (4, 0) with reward -3
+    a = rewards
+    '''
+    a = np.array(a) # TODO: This cast is HACKY!
+    ix = [i for i in range(len(a)) if a[i] == np.min(a)]
+    i = np.random.randint(len(ix))
+    return ix[i]
+    
+def rand_argmax(a):
+    'Randomly returns the index of one of multiple minimum numbers in an array'
+    a = np.array(a) # TODO: This cast is HACKY!
+    ix = [i for i in range(len(a)) if a[i] == np.max(a)]
+    i = np.random.randint(len(ix))
+    return ix[i]
 
 def rewardEstimate(gameState, player, max_depth=4, depth=0):
     '''
@@ -87,11 +111,22 @@ def rewardEstimate(gameState, player, max_depth=4, depth=0):
         
         #pick min/max reward depending on if it's player MAX or player MINs
         #turn:
-        i = np.argmax(rewards) if player==MAX else np.argmin(rewards)
+        if (depth == 0): # for the last return value, return a random move
+                         # out of the minimum (or maximum) moves. This is to
+                         # make the A.I. less predictable. I.e. it will not do
+                         # the same over and over again in a given situation.
+            i = rand_argmax(rewards) if player==MAX else rand_argmin(rewards)
+            print(moves)
+            print(rewards)
+        else: # for the others return the first, because it doesn't matter.
+            i = np.argmax(rewards) if player==MAX else np.argmin(rewards)
         reward = rewards[i]
         move   = moves[i]
     return reward, move
-    
+
+
+
+
 def calculate_minmax_move(gameState, max_depth=4, player=1):
     '''Note: This function assumes gameState to be NOT terminal'''
     # 'player' (1 or -1) is the player to make the next move.
