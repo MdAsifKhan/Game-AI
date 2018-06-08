@@ -1,11 +1,8 @@
 # -*- coding: utf-8 -*-
-"""
-Created on Tue May 22 21:06:46 2018
-
-@author: sgang
-"""
 
 #!/usr/bin/env python
+
+
 import numpy as np
 import pygame
 from pygame.locals import *
@@ -18,6 +15,9 @@ window = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
 #pygame.key.set_repeat(400, 30)
 clock = pygame.time.Clock()
 score = 0
+start_time = pygame.time.get_ticks()
+
+
 
 # groups
 all_sprites_group = pygame.sprite.Group()
@@ -76,8 +76,21 @@ while True:
         if pygame.sprite.spritecollide(ball, bricks_group, True):
             score += len(hits)
             print "Score: %s" % score
+            
+        # accelerate ball speed with time (in 10 seconds intervals)
+        """time = pygame.time.get_ticks()
+        if (time-start_time>10000):
+            ball.speed_x *= 2
+            ball.speed_y *= 2
+            start_time = time"""
+            
+        # accelerate ball and player speed with time (in 10 seconds intervals)
         time = pygame.time.get_ticks()
-        print time
+        if (time-start_time>10000):
+            ball.speed_x *= 2
+            ball.speed_y *= 2
+            player.speed_x *= 20
+            start_time = time
 
     # render groups
     window.fill((0, 0, 0))
