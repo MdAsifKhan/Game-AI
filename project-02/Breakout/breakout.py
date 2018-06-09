@@ -57,9 +57,9 @@ while True:
     # move player horizontally
     p = np.random.random()
     if(p>=0.5):
-        player.move_left()
+        player.move_left(player.speed_x)
     else:
-        player.move_right()
+        player.move_right(player.speed_x)
             
     # collision detection (ball bounce against brick & player)
     hits = pygame.sprite.spritecollide(ball, player_bricks_group, False)
@@ -89,7 +89,7 @@ while True:
         if (time-start_time>10000):
             ball.speed_x *= 2
             ball.speed_y *= 2
-            player.speed_x *= 20
+            player.speed_x *= 2
             start_time = time
 
     # render groups
