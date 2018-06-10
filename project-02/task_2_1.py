@@ -33,7 +33,9 @@ class Tree:
         sixth_move = fifth_move*4 - 6*math.factorial(3)*2*math.factorial(3)
         seventh_move = 8*3*6*math.factorial(3)*5*4*3 - 6*3*6*math.factorial(3)*math.factorial(3) 
         eight_move = 8*3*6*math.factorial(3)*5*4*3*2 - 6*3*6*math.factorial(3)*2*math.factorial(4) 
-        ninth_move = 2*3*8*math.factorial(4)*math.factorial(4) + 6*3*4*math.factorial(4)*math.factorial(4) + 22*1*math.factorial(4)*math.factorial(4) 
+        ninth_move = 2*3*8*math.factorial(4)*math.factorial(4) + 6*3*4*math.factorial(4)*math.factorial(4) 
+                        + 22*1*math.factorial(4)*math.factorial(4)+ 16*math.factorial(5)*math.factorial(4) 
+ 
         self.upper_bound = fifth_move+sixth_move+seventh_move+eight_move+ninth_move
 
 
@@ -49,7 +51,6 @@ class Node:
             for x,y in zip(xs, ys):
                 next_S = copy.deepcopy(self.S)
                 next_S[x,y] = self.player
-                print_game_state(next_S)
                 child = Node(next_S, self.player *-1)
                 tree.grow_tree(child)
                 self.children.append(child)
