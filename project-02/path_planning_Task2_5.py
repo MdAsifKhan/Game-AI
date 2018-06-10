@@ -57,9 +57,9 @@ def color_map(graph, path, point1, point2):
 
 if __name__== "__main__":
 
-	#file = "simpleMap-1-20x20.txt"
+	file = "simpleMap-1-20x20.txt"
 	# Second graph file to validate logic
-	file = "simpleMap-4-22x34.txt"
+	#file = "simpleMap-4-22x34.txt"
 
 	# Create a matrix.
 	matrix = read_file(file)
