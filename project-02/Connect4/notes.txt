@@ -1,0 +1,2 @@
+GUI:
+Since our truely magnificent GUI relies on the data model which is encapsulated in a class, the GUI really couldn't care less about which data model we use. So we just swapped the old data model for a new one and didn't change a single line of GUI code.

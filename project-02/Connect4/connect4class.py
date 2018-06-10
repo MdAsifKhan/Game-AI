@@ -1,6 +1,7 @@
 import numpy as np
-import itertools
 import matplotlib.pyplot as plt
+from gameState import move_still_possible, move_was_winning_move, possible_moves
+from minimax import calculate_minmax_move
 
 class connect4class:
     """Models the game Connect 4 on a 6x7 board"""
@@ -20,7 +21,7 @@ class connect4class:
         self.gameState = np.zeros((6,7), dtype=int)
         
         # to keep track of number of pieces each vertical column
-        self.colScores = np.zeros(7, dtype=int)
+        self.colScores = np.zeros(7, dtype=int) # TODO: Can this be deleted?
     
         # initialize player number, move counter
         self.player = 1
@@ -48,29 +49,23 @@ class connect4class:
         self.reset_statistics()
         
     def move_still_possible(self):
-        S = self.gameState
-        return not (S[S==0].size == 0)
+        return move_still_possible(self.gameState)
            
     def move_at_random(self):
         S = self.gameState
-        F = self.colScores
         p = self.player
+            
+        # Obtain a list of all possible moves:
+        possible = possible_moves(S)
         
-        # Looks for all vertical columns where number of pieces
-        # is less than 6
-        y = np.where(F < 6)
+        # and pick one at random:
+        i = np.random.randint(len(possible))
+        random_move = possible[i] 
         
-        # to select the column for next move out of the above columns 
-        j = y[0][np.random.randint(len(y[0]))]
+        # place the players chip at the selected position:
+        S[random_move] = p
         
-        # placing piece on the top of selected column
-        i = F[j]
-        S[i,j] = p
-        
-        # Increment the count of pieces of in chosen column
-        F[j] += 1
-        
-        return (i,j)
+        return random_move
     
     def print_game_state(self):
         B = np.copy(self.gameState).astype(object)
@@ -79,65 +74,28 @@ class connect4class:
         print(B)
     
     def move_was_winning_move(self):
-        S = self.gameState
-        c = 0
+        return move_was_winning_move(self.gameState)
         
-        # Checks for 4 consecutive pieces in horizontal rows
-        for i in range(S.shape[0]):
-            s = [sum(1 for _ in group) for key, group in itertools.groupby(S[i,:]) if key]
-            if(len(s) > 0):
-                c = np.max(s)
-            else:
-                c = 0
-                
-            if(c >= 4):
-                print("Horizontal")
-                return True
-        
-        # Checks for 4 consecutive pieces in vertical rows
-        for i in range(S.shape[1]):
-            s = [sum(1 for _ in group) for key, group in itertools.groupby(S[:,i]) if key]
-            if(len(s) > 0):
-                c = np.max(s)
-            else:
-                c = 0
-                
-            if(c >= 4):
-                print("Vertical")
-                return True
-        
-        # Checks for 4 consecutive pieces in diagonals with length more than 4 
-        diags = [S[::-1,:].diagonal(i) for i in range(-S.shape[0]+1,S.shape[1])]
-        diags.extend(S.diagonal(i) for i in range(S.shape[1]-1,-S.shape[0],-1))
-        
-        for n in diags:
-            if(len(n) > 3):
-                s = [sum(1 for _ in group) for key, group in itertools.groupby(n) if key]
-                if(len(s) > 0):
-                    c = np.max(s)
-                else:
-                    c = 0
-                    
-                if(c >= 4):
-                    print("Diagonal")
-                    return True
-             
-        return False
-
     def play_next_move(self):
             # get player symbol
             name = self.symbols[self.player]
-            print('%s moves' % name)
-    
+
             # For storing previous game state and move in case of winning move
             prev_gameState = self.gameState
-    
-            # let player move at random
-            move = self.move_at_random()
-    
-            # print current game state
+            
+            players_to_use_MinMax = [1,-1] # can be [], [-1], [1] or [-1,1]
+            if (self.player in players_to_use_MinMax):  # let player 1 move according to MinMax
+                reward, move = calculate_minmax_move(self.gameState, max_depth=4, player=1)
+                self.gameState[move] = self.player
+                print("Player " + name + " moves using MinMax to "
+                      + str(move) + " with reward " + str(reward))
+            else: # let player -1 move at random
+                move = self.move_at_random()
+                print("Player " + name + " moves at random to " + str(move))
+            
             self.print_game_state()
-            # print(colScores)
+            print('\n\n')
+            #move = self.move_at_random()
             
             # evaluate game state
             if self.move_was_winning_move():
@@ -201,4 +159,4 @@ class connect4class:
    
 if __name__ == '__main__':
     model = connect4class()
-    model.collect_stats(10)
+    model.collect_stats(1)
