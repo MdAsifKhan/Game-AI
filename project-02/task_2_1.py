@@ -1,7 +1,7 @@
 import numpy as np
 import copy
 import math
-from tic_tac_toe import print_game_state, move_still_possible, move_was_winning_move
+from tic_tac_toe import print_game_state, move_still_possible, move_was_winning_move, plot_histogram
 import pdb
 
 
@@ -33,8 +33,7 @@ class Tree:
         sixth_move = fifth_move*4 - 6*math.factorial(3)*2*math.factorial(3)
         seventh_move = 8*3*6*math.factorial(3)*5*4*3 - 6*3*6*math.factorial(3)*math.factorial(3) 
         eight_move = 8*3*6*math.factorial(3)*5*4*3*2 - 6*3*6*math.factorial(3)*2*math.factorial(4) 
-        ninth_move = 2*3*8*math.factorial(4)*math.factorial(4) + 6*3*4*math.factorial(4)*math.factorial(4) 
-                        + 22*1*math.factorial(4)*math.factorial(4)+ 16*math.factorial(5)*math.factorial(4) 
+        ninth_move = 2*3*8*math.factorial(4)*math.factorial(4) + 6*3*4*math.factorial(4)*math.factorial(4) + 22*1*math.factorial(4)*math.factorial(4)+ 16*math.factorial(5)*math.factorial(4) 
  
         self.upper_bound = fifth_move+sixth_move+seventh_move+eight_move+ninth_move
 
@@ -82,3 +81,6 @@ if __name__ == '__main__':
     print('Number of Leaf Nodes {}'.format(tree.leaves_count))
     print('Number of Branches {}'.format(tree.branches))
     print('Branching Factor {}'.format(tree.branching_factor))
+    data = np.concatenate((np.ones(tree.wins_x),-np.ones(tree.wins_x),np.zeros(tree.draws)))
+    plot = plot_histogram(data,'MinMax Statistics',1)
+    plot.show()
