@@ -1,0 +1,76 @@
+digraph {
+	node [shape=box]
+	n0 [label="n0 5" color=blue]
+	node [shape=box]
+	n1 [label="n1 5" color=orange]
+	n0 -> n1
+	node [shape=box]
+	n2 [label="n2 1" color=orange]
+	n0 -> n2
+	node [shape=box]
+	n3 [label="n3 5" color=orange]
+	n0 -> n3
+	node [shape=box]
+	n4 [label="n4 2" color=orange]
+	n0 -> n4
+	node [shape=box]
+	n5 [label="n5 18" color=blue]
+	n1 -> n5
+	node [shape=box]
+	n6 [label="n6 6" color=blue]
+	n1 -> n6
+	node [shape=box]
+	n7 [label="n7 16" color=blue]
+	n1 -> n7
+	node [shape=box]
+	n8 [label="n8 6" color=blue]
+	n1 -> n8
+	node [shape=box]
+	n9 [label="n9 5" color=blue]
+	n1 -> n9
+	node [shape=box]
+	n10 [label="n10 7" color=blue]
+	n2 -> n10
+	node [shape=box]
+	n11 [label="n11 1" color=blue]
+	n2 -> n11
+	node [shape=box]
+	n12 [label="n12 16" color=blue]
+	n3 -> n12
+	node [shape=box]
+	n13 [label="n13 16" color=blue]
+	n3 -> n13
+	node [shape=box]
+	n14 [label="n14 5" color=blue]
+	n3 -> n14
+	node [shape=box]
+	n15 [label="n15 10" color=blue]
+	n4 -> n15
+	node [shape=box]
+	n16 [label="n16 2" color=blue]
+	n4 -> n16
+	node [shape=box]
+	n5 [label="n5 18" color=blue]
+	node [shape=box]
+	n6 [label="n6 6" color=blue]
+	node [shape=box]
+	n7 [label="n7 16" color=blue]
+	node [shape=box]
+	n8 [label="n8 6" color=blue]
+	node [shape=box]
+	n9 [label="n9 5" color=blue]
+	node [shape=box]
+	n10 [label="n10 7" color=blue]
+	node [shape=box]
+	n11 [label="n11 1" color=blue]
+	node [shape=box]
+	n12 [label="n12 16" color=blue]
+	node [shape=box]
+	n13 [label="n13 16" color=blue]
+	node [shape=box]
+	n14 [label="n14 5" color=blue]
+	node [shape=box]
+	n15 [label="n15 10" color=blue]
+	node [shape=box]
+	n16 [label="n16 2" color=blue]
+}
