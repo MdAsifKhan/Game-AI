@@ -23,15 +23,17 @@ def terminal_value(gameState, player_who_caused_this_state, depth=0):
     player_who_caused_this_state is MAX or MIN represented by 1 and -1 respectively.
     Returns the value of a terminal game state
     
-    For example: The first call to 
+    The values get modified by the depth of the node, to make early winns more
+    attractive than late ones. And to make late losses more attractive than 
+    early ones.
     '''
     if move_was_winning_move(gameState):
         #Win:
         if player_who_caused_this_state == 1:
-            value = 1000 - depth
+            value = 10000 - depth
         #Loss
         else:
-            value = -1000 + depth
+            value = -10000 + depth
     #Draw:
     else:
         value = 0
