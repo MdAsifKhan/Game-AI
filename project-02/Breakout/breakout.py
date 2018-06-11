@@ -2,22 +2,43 @@
 
 #!/usr/bin/env python
 
-
 import numpy as np
 import pygame
 from pygame.locals import *
 import sys
+import time
 from breakout_sprites import *
 
+
+def text_objects(text, font):
+    textSurface = font.render(text, True, white)
+    return textSurface, textSurface.get_rect()
+
+
+def message_display(text):
+    largeText = pygame.font.Font('freesansbold.ttf',50)
+    TextSurf, TextRect = text_objects(text, largeText)
+    TextRect.center = ((WINDOW_WIDTH/2),(WINDOW_HEIGHT/2))
+    screen.blit(TextSurf, TextRect)
+    pygame.display.update()
+    time.sleep(2)
+
+        
 # game init
 pygame.init()
+black = (0,0,0)
+white = (255,255,255)
+red = (255,0,0)
+
 window = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
-#pygame.key.set_repeat(400, 30)
+pygame.display.set_caption('Breakout')
+size = (WINDOW_WIDTH, WINDOW_HEIGHT)
+screen = pygame.display.set_mode(size)
 clock = pygame.time.Clock()
+background_image = pygame.image.load('images/background.png').convert()    
+sound = pygame.mixer.Sound('audio/beep.wav')
 score = 0
 start_time = pygame.time.get_ticks()
-
-
 
 # groups
 all_sprites_group = pygame.sprite.Group()
@@ -38,17 +59,16 @@ for i in xrange(8):
         all_sprites_group.add(brick)
         bricks_group.add(brick)
         player_bricks_group.add(brick)
-
+ 
 # game loop
 while True:
     # game over
-    if ball.rect.y > WINDOW_HEIGHT:
-        
+    if ball.rect.y > WINDOW_HEIGHT:  
         print 'Game Over'
+        message_display('Game Over')
         pygame.quit()
         sys.exit()
-                
-    # move player horizontally
+
     for event in pygame.event.get():
         if event.type == QUIT:
             pygame.quit()
@@ -57,20 +77,20 @@ while True:
     # move player horizontally
     p = np.random.random()
     if(p>=0.5):
-        player.move_left()
+        player.move_left(player.speed_x)
     else:
-        player.move_right()
+        player.move_right(player.speed_x)
             
     # collision detection (ball bounce against brick & player)
     hits = pygame.sprite.spritecollide(ball, player_bricks_group, False)
     if hits:
+        sound.play()
         hit_rect = hits[0].rect
         # bounce the ball (according to side collided)
         if hit_rect.left > ball.rect.left or ball.rect.right < hit_rect.right:
             ball.speed_y *= -1
         else:
             ball.speed_x *= -1
-   
 
         # collision with blocks
         if pygame.sprite.spritecollide(ball, bricks_group, True):
@@ -78,24 +98,26 @@ while True:
             print "Score: %s" % score
             
         # accelerate ball speed with time (in 10 seconds intervals)
-        """time = pygame.time.get_ticks()
-        if (time-start_time>10000):
+        """current_time = pygame.time.get_ticks()
+        if (current_time-start_time>10000):
             ball.speed_x *= 2
             ball.speed_y *= 2
-            start_time = time"""
+            start_time = current_time"""
             
         # accelerate ball and player speed with time (in 10 seconds intervals)
-        time = pygame.time.get_ticks()
-        if (time-start_time>10000):
+        current_time = pygame.time.get_ticks()
+        if (current_time-start_time>10000):
             ball.speed_x *= 2
             ball.speed_y *= 2
-            player.speed_x *= 20
-            start_time = time
-
+            player.speed_x *= 2
+            start_time = current_time
+    
+    # render background image
+    screen.blit(background_image, [0, 0])
+    
     # render groups
-    window.fill((0, 0, 0))
     all_sprites_group.draw(window)
-
+    
     # refresh screen
     all_sprites_group.update()
     clock.tick(60)

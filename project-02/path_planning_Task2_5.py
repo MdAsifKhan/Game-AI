@@ -52,8 +52,8 @@ def dist(point1, point2):
 	 return ((x1 - x2) ** 2 + (y1 - y2) ** 2) ** 0.5
 
 # Produces a color map for the nodes in the graph.
-def color_map(graph, path):
-	return list(map(lambda n: "yellow" if n in path else ("red" if n == (0, 10) else ("green" if n == (15, 1) else "black")), graph.nodes()))
+def color_map(graph, path, point1, point2):
+	return list(map(lambda n: "yellow" if n in path else ("red" if n == point1 else ("green" if n == point2 else "black")), graph.nodes()))
 
 if __name__== "__main__":
 
@@ -63,42 +63,53 @@ if __name__== "__main__":
 
 	# Create a matrix.
 	matrix = read_file(file)
-	rows, columns = matrix.shape
-
-	# Create the graph based on the 2d matrix.
-	graph = create_graph(matrix)
-	pos = dict(zip(graph, graph))
-	path = []
-	node_sizes = list(map(lambda n: 50 if n == (0, 10) or n == (15, 1) else 20, graph.nodes()))
 
 	# Points between which path needs to be calculated.
 	point1 = (0, 10)
 	point2 = (15, 1)
 
+	# Create the graph based on the 2d matrix.
+	graph = create_graph(matrix)
+	pos = dict(zip(graph, graph))
+	path = []
+	node_sizes = list(map(lambda n: 50 if n == point1 or n == point2 else 20, graph.nodes()))
+
+
 	# Plot graph.
 	plt.subplot(221)
 	plt.title("Graph")
-	nx.draw(graph, pos, node_color = color_map(graph, []), node_size = node_sizes)	
+	nx.draw(graph, pos, node_color = color_map(graph, [], (-1, -1), (-1, -1)), node_size = node_sizes)	
 
 	# Calculate the path between the two points using Dijkstra's algorithm.
-	path = nx.dijkstra_path(graph, point1, point2)
-	print("Dijkstra Path")
-	print(path)
+	try:
+		path = nx.dijkstra_path(graph, point1, point2)
+		print("Dijkstra Path")
+		print(path)
+	except nx.exception.NodeNotFound:
+		print("The node/nodes are not found in the graph.")
+	except:
+		print("Cound not find path in graph.")
 
 	# Plot Dijkstra's path.
 	plt.subplot(222)
 	plt.title("Dijkstra Path")
-	nx.draw(graph, pos, node_color = color_map(graph, path[1:-1]), with_labels=False, node_size = node_sizes)
+	nx.draw(graph, pos, node_color = color_map(graph, path[1:-1], point1, point2), with_labels=False, node_size = node_sizes)
 
 	# Calculate the path between the two points using A* algorithm.
-	path = nx.astar_path(graph, point1, point2, dist)
-	print("A* Path")
-	print(path)
+	try:
+		path = nx.astar_path(graph, point1, point2, dist)
+		print("A* Path")
+		print(path)
+	except nx.exception.NodeNotFound:
+		print("The node/nodes are not found in the graph.")
+	except:
+		print("Cound not find path in graph.")
+
 
 	# Plot A* path.
 	plt.subplot(223)
 	plt.title("A* Path")
-	nx.draw(graph, pos, node_color = color_map(graph, path[1:-1]), with_labels=False, node_size = node_sizes)
+	nx.draw(graph, pos, node_color = color_map(graph, path[1:-1], point1, point2), with_labels=False, node_size = node_sizes)
 
 	# Shows all three graphs.
 	plt.show()

@@ -1,86 +1,77 @@
-# -*- coding: utf-8 -*-
-
-#!/usr/bin/env python
-
-
-import numpy as np
+#!/usr/bin/python
 import pygame
-from pygame.locals import *
-import sys
-from breakout_sprites import *
 
-# game init
-pygame.init()
-window = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
-#pygame.key.set_repeat(400, 30)
-clock = pygame.time.Clock()
-score = 0
+# constants
+WINDOW_WIDTH, WINDOW_HEIGHT = 640, 480
+BALL_WIDTH, BALL_HEIGHT = 16, 16
+BRICK_WIDTH, BRICK_HEIGHT = 64, 16
+PLAYER_WIDTH, PLAYER_HEIGHT = 64, 16
+PLAYER_SPEED = 20
+BALL_SPEED = 2
 
-# groups
-all_sprites_group = pygame.sprite.Group()
-player_bricks_group = pygame.sprite.Group()
-bricks_group = pygame.sprite.Group()
 
-# add sprites to their group
-ball = Ball('ball.png', BALL_SPEED, -BALL_SPEED)
-all_sprites_group.add(ball)
+class Breakout_Sprite(pygame.sprite.Sprite):
+    """ Breakout Sprite class that extends following classes
+        Attributes:
+            image_file (str): Sprite-image filename.
+    """
+    def __init__(self, image_file):
+        pygame.sprite.Sprite.__init__(self)
 
-player = Player('player.png', PLAYER_SPEED)
-all_sprites_group.add(player)
-player_bricks_group.add(player)
+        # load image & rect
+        self.image = pygame.image.load('images/' + image_file).convert()
+        self.image.set_colorkey((255, 255, 255))
+        self.rect = self.image.get_rect()
 
-for i in xrange(8):
-    for j in xrange(8):
-        brick = Brick('brick.png', (i+1)*BRICK_WIDTH + 5, (j+3)*BRICK_HEIGHT + 5)
-        all_sprites_group.add(brick)
-        bricks_group.add(brick)
-        player_bricks_group.add(brick)
 
-# game loop
-while True:
-    # game over
-    if ball.rect.y > WINDOW_HEIGHT:
-        
-        print 'Game Over'
-        pygame.quit()
-        sys.exit()
-                
-    # move player horizontally
-    for event in pygame.event.get():
-        if event.type == QUIT:
-            pygame.quit()
-            sys.exit()
-    
-    # move player horizontally
-    p = np.random.random()
-    if(p>=0.5):
-        player.move_left()
-    else:
-        player.move_right()
+class Player(Breakout_Sprite):
+    """ Bar: Positioned at the bottom of the window,
+             but can move horizontally.
+    """
+    def __init__(self, image_file, speed_x):
+        Breakout_Sprite.__init__(self, image_file)
+        self.rect.bottom = WINDOW_HEIGHT
+        self.rect.left = (WINDOW_WIDTH - self.image.get_width()) / 2
+        self.speed_x = speed_x
+
+    def move_left(self, speed_x):
+        if self.rect.left > 0:
+            self.rect = self.rect.move(-speed_x, 0)
             
-    # collision detection (ball bounce against brick & player)
-    hits = pygame.sprite.spritecollide(ball, player_bricks_group, False)
-    if hits:
-        hit_rect = hits[0].rect
-        # bounce the ball (according to side collided)
-        if hit_rect.left > ball.rect.left or ball.rect.right < hit_rect.right:
-            ball.speed_y *= -1
-        else:
-            ball.speed_x *= -1
-   
 
-        # collision with blocks
-        if pygame.sprite.spritecollide(ball, bricks_group, True):
-            score += len(hits)
-            print "Score: %s" % score
-        time = pygame.time.get_ticks()
-        print time
+    def move_right(self, speed_x):
+        if self.rect.right < WINDOW_WIDTH:
+            self.rect = self.rect.move(speed_x, 0)
 
-    # render groups
-    window.fill((0, 0, 0))
-    all_sprites_group.draw(window)
 
-    # refresh screen
-    all_sprites_group.update()
-    clock.tick(60)
-    pygame.display.flip()
+
+class Brick(Breakout_Sprite):
+    """ Brick: Statically positioned in (x, y).
+    """
+    def __init__(self, image_file, x, y):
+        Breakout_Sprite.__init__(self, image_file)
+        self.rect.x, self.rect.y = x, y
+
+
+class Ball(Breakout_Sprite):
+    """ Ball: Moves according to speed (speed_x, speed_y).
+        Attributes:
+            speed_x (int): Ball's x-speed.
+            speed_y (int): Ball's y-speed.
+    """
+    def __init__(self, image_file, speed_x, speed_y):
+        Breakout_Sprite.__init__(self, image_file)
+        self.rect.bottom = WINDOW_HEIGHT - PLAYER_HEIGHT
+        self.rect.left = WINDOW_WIDTH / 2
+        self.speed_x = speed_x
+        self.speed_y = speed_y
+        
+
+    def update(self):
+        self.rect = self.rect.move(self.speed_x, self.speed_y)
+
+        # bounce against borders
+        if self.rect.x > WINDOW_WIDTH - self.image.get_width() or self.rect.x < 0:
+            self.speed_x *= -1
+        if self.rect.y < 0:
+            self.speed_y *= -1
