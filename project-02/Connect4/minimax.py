@@ -28,13 +28,13 @@ def terminal_value(gameState, player_who_caused_this_state, depth=0):
     if move_was_winning_move(gameState):
         #Win:
         if player_who_caused_this_state == 1:
-            value = 1000 #-depth
+            value = 1000 - depth
         #Loss
         else:
-            value = -1000 #+depth
+            value = -1000 + depth
     #Draw:
     else:
-        value = 500
+        value = 0
     '''   
     print('-------------------------')
     print(gameState)

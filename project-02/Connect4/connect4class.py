@@ -45,6 +45,9 @@ class connect4class:
         ## GAME STATE:
         self.start_new_game()
         
+        # Defines which players use minmax and which move at random:
+        self.players_to_use_MinMax = [1] # can be [], [-1], [1] or [-1,1]
+        
         ## STATISTICAL DATA:
         self.reset_statistics()
         
@@ -83,8 +86,7 @@ class connect4class:
             # For storing previous game state and move in case of winning move
             prev_gameState = self.gameState
             
-            players_to_use_MinMax = [1,-1] # can be [], [-1], [1] or [-1,1]
-            if (self.player in players_to_use_MinMax):  # let player 1 move according to MinMax
+            if (self.player in self.players_to_use_MinMax):  # let player 1 move according to MinMax
                 reward, move = calculate_minmax_move(self.gameState, max_depth=4, player=1)
                 self.gameState[move] = self.player
                 print("Player " + name + " moves using MinMax to "
@@ -159,4 +161,4 @@ class connect4class:
    
 if __name__ == '__main__':
     model = connect4class()
-    model.collect_stats(1)
+    model.collect_stats(10)
