@@ -4,11 +4,9 @@
 
 ### Graph Reading
 
-1. Read the graph into a 2D array.
-2. Create a general 2d Grid graph using networkx.
-3. Create a representation of nodes using a 2D array where:  
-      a. Rows increase from left to right.  
-      b. Columns increase from bottom to top.
+1. Read data into a 2d array.
+2. Create a 2d grid graph using networkx.
+3. Create a mapping  of coordinates in grid graph.
 4. Iterate the graph removing the nodes with values “1”.
 
 ### Functions
