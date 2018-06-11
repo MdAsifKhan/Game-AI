@@ -88,7 +88,7 @@ def rewardEstimate(gameState, player, max_depth=4, depth=0):
         
     if( game_over(gameState) ):
         # It was a terminal state. Pick min or maximum value
-        reward = terminal_value(gameState, player_who_caused_this_state=player*(-1))
+        reward = terminal_value(gameState, player_who_caused_this_state=player*(-1), depth=depth)
         move  = None # because from gameState not move need to be taken to get
                      # the reward, since gameState is a terminal state.
     elif depth == max_depth:

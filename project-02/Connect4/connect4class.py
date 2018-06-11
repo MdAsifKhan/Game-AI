@@ -161,4 +161,4 @@ class connect4class:
    
 if __name__ == '__main__':
     model = connect4class()
-    model.collect_stats(10)
+    model.collect_stats(100)
