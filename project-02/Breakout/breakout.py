@@ -26,10 +26,7 @@ def message_display(text):
         
 # game init
 pygame.init()
-black = (0,0,0)
 white = (255,255,255)
-red = (255,0,0)
-
 window = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
 pygame.display.set_caption('Breakout')
 size = (WINDOW_WIDTH, WINDOW_HEIGHT)
@@ -49,7 +46,7 @@ bricks_group = pygame.sprite.Group()
 ball = Ball('ball.png', BALL_SPEED, -BALL_SPEED)
 all_sprites_group.add(ball)
 
-player = Player('player.png', PLAYER_SPEED)
+player = Player('player.png', BALL_SPEED)
 all_sprites_group.add(player)
 player_bricks_group.add(player)
 
@@ -62,25 +59,26 @@ for i in xrange(8):
  
 # game loop
 while True:
-    # game over
+    # game over if ball falls down
     if ball.rect.y > WINDOW_HEIGHT:  
         print 'Game Over'
         message_display('Game Over')
         pygame.quit()
         sys.exit()
-
+    
+    # exit pygame if user closes the window
     for event in pygame.event.get():
         if event.type == QUIT:
             pygame.quit()
             sys.exit()
     
-    # move player horizontally
-    p = np.random.random()
-    if(p>=0.5):
-        player.move_left(player.speed_x)
-    else:
-        player.move_right(player.speed_x)
-            
+    # player wins if all bricks can be broken
+    if score == 64:
+        print 'You Win'
+        message_display('You Win')
+        pygame.quit()
+        sys.exit()
+
     # collision detection (ball bounce against brick & player)
     hits = pygame.sprite.spritecollide(ball, player_bricks_group, False)
     if hits:
@@ -95,23 +93,18 @@ while True:
         # collision with blocks
         if pygame.sprite.spritecollide(ball, bricks_group, True):
             score += len(hits)
-            print "Score: %s" % score
+            print "Score: %s" % score   
             
-        # accelerate ball speed with time (in 10 seconds intervals)
-        """current_time = pygame.time.get_ticks()
-        if (current_time-start_time>10000):
-            ball.speed_x *= 2
-            ball.speed_y *= 2
-            start_time = current_time"""
-            
-        # accelerate ball and player speed with time (in 10 seconds intervals)
-        current_time = pygame.time.get_ticks()
-        if (current_time-start_time>10000):
-            ball.speed_x *= 2
-            ball.speed_y *= 2
-            player.speed_x *= 2
-            start_time = current_time
+    # accelerate ball speed with time (in 15 seconds intervals)
+    current_time = pygame.time.get_ticks()
+    if (current_time-start_time>10000):
+        ball.speed_x *= 2
+        ball.speed_y *= 2
+        start_time = current_time
     
+    # move player horizontally
+    player.move(ball.speed_x)
+            
     # render background image
     screen.blit(background_image, [0, 0])
     
