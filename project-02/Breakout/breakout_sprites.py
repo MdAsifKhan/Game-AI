@@ -6,7 +6,6 @@ WINDOW_WIDTH, WINDOW_HEIGHT = 640, 480
 BALL_WIDTH, BALL_HEIGHT = 16, 16
 BRICK_WIDTH, BRICK_HEIGHT = 64, 16
 PLAYER_WIDTH, PLAYER_HEIGHT = 64, 16
-PLAYER_SPEED = 20
 BALL_SPEED = 2
 
 
@@ -24,24 +23,22 @@ class Breakout_Sprite(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
 
 
+
 class Player(Breakout_Sprite):
     """ Bar: Positioned at the bottom of the window,
              but can move horizontally.
+             Attributes:
+                 speed_x (int): Paddle's x-speed (same as Ball's x-speed).      
     """
     def __init__(self, image_file, speed_x):
         Breakout_Sprite.__init__(self, image_file)
         self.rect.bottom = WINDOW_HEIGHT
-        self.rect.left = (WINDOW_WIDTH - self.image.get_width()) / 2
+        self.rect.left = ((WINDOW_WIDTH - self.image.get_width()) / 2)
         self.speed_x = speed_x
 
-    def move_left(self, speed_x):
-        if self.rect.left > 0:
-            self.rect = self.rect.move(-speed_x, 0)
             
-
-    def move_right(self, speed_x):
-        if self.rect.right < WINDOW_WIDTH:
-            self.rect = self.rect.move(speed_x, 0)
+    def move(self, speed_x):
+        self.rect = self.rect.move(speed_x, 0)
 
 
 
