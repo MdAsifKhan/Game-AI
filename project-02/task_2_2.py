@@ -2,6 +2,7 @@ import numpy as np
 import pdb
 import graphviz as gv
 
+# Class to represent Node in a tree 
 class Node:
     def __init__(self, nodeid, player):
         self.id = nodeid
@@ -15,12 +16,13 @@ class Node:
     def score(self, score):
         self.score = score
 
+# Class to create a tree
 class Tree:
     
     def __init__(self, leaf_score):
         self.nodes = []
         self.leaf_score = leaf_score   
-
+    # Method for tree-1 of Task2-2
     def grow_tree_1(self):
         n0 = Node('n0', 1)
         n1 = Node('n1', -1)
@@ -64,6 +66,7 @@ class Tree:
 
         self.nodes = [n0,n1,n2,n3,n4,n5,n6,n7,n8,n9,n10,n11,n12,n13,n14,n15,n16,n17,n18,n19]
 
+    # Method for tree-2 of Task2-2
     def grow_tree_2(self):
         n0 = Node('n0', 1)
         n1 = Node('n1', -1)
@@ -108,10 +111,12 @@ class Tree:
             else:
                 node.score = None
 
+# Class to implement MiniMax search on a tree
 class MiniMax:
     def __init__(self, tree):
         self.tree = tree  
 
+    # Method to implement minimax search
     def minimax(self, node):
         max_score = self.max_value(node) 
         children = self.get_children(node)
@@ -123,7 +128,7 @@ class MiniMax:
                 break
         return move
 
-
+    # Method to find max value
     def max_value(self, node):
         print('MAX Node {}'.format(node.id))
         if self.isleaf(node):
@@ -134,6 +139,7 @@ class MiniMax:
         node.score = mmv
         return mmv
 
+    # Method to find min value
     def min_value(self, node):
         print('MIN Node {}'.format(node.id))
         if self.isleaf(node):
@@ -145,17 +151,21 @@ class MiniMax:
         node.score = mmv
         return mmv
 
+    # Method to get children of a node
     def get_children(self, node):
         return node.children
 
+    # Method to check if node is a leaf
     def isleaf(self, node):
         if not node.children:
             return True
         return False
 
+    # Method to find score of a node
     def get_score(self, node):
         return node.score          
 
+    # Method to traverse tree and add nodes and edges to a dot file
     def traverse_tree(self, tree_dot):
         # Root Node
         tree_dot.attr('node', shape='box')
@@ -178,6 +188,7 @@ class MiniMax:
                 else:
                     tree_dot.node(name = node.id, color='orange',label=node.id +' '+str(node.score))
 
+    # Method to save tree as a dot file 
     def plot_tree(self, filename):
         #Save Dot file for tree
         tree_dot = gv.Digraph(format='svg',engine='dot')

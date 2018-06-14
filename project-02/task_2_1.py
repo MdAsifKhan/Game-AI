@@ -4,7 +4,7 @@ import math
 from tic_tac_toe import print_game_state, move_still_possible, move_was_winning_move, plot_histogram
 import pdb
 
-
+# Class to create a tree
 class Tree:
     def __init__(self):
         self.nodes = []
@@ -14,11 +14,13 @@ class Tree:
         self.branches = 0
         self.leaves_count = 0
         self.draws = 0
-        self.upper_bound = math.factorial(9)
-
+        self.upper_bound_leaf = 0
+        self.upper_bound_nodes = 0
+    # Method to add nodes to a tree
     def grow_tree(self, node):
         self.nodes.append(node)
 
+    # Method to gather statistics of a Game-Tree
     def statistics(self):
         for node in self.nodes:
             self.branches += len(node.children)
@@ -26,7 +28,6 @@ class Tree:
                 self.leaf_nodes.append(node)
                 self.leaves_count += 1
         
-        self.branching_factor = self.branches/len(self.nodes)
         self.draws = len(self.leaf_nodes) - (self.wins_x+self.wins_o)
         
         fifth_move = 8*math.factorial(3)*6*5
@@ -35,15 +36,20 @@ class Tree:
         eight_move = 8*3*6*math.factorial(3)*5*4*3*2 - 6*3*6*math.factorial(3)*2*math.factorial(4) 
         ninth_move = 2*3*8*math.factorial(4)*math.factorial(4) + 6*3*4*math.factorial(4)*math.factorial(4) + 22*1*math.factorial(4)*math.factorial(4)+ 16*math.factorial(5)*math.factorial(4) 
  
-        self.upper_bound = fifth_move+sixth_move+seventh_move+eight_move+ninth_move
+        self.upper_bound_leaf = fifth_move+sixth_move+seventh_move+eight_move+ninth_move
+        self.branching_factor = self.branches/(len(self.nodes)-self.upper_bound_leaf)
 
-
+        self.upper_bound_nodes = np.sum([math.factorial(9)/math.factorial(i) for i in range(10)])
+# Class to represent Node in a tree 
 class Node:
     def __init__(self, S, player):
-        self.S = S
+        # S: Game State of a Node
+        # player: Player to make a move from current game state of a Node
+        self.S = S          
         self.player = player
         self.children = []
-
+        
+    # Method to get children of a node
     def get_children(self, tree):
         if move_still_possible(self.S):
             xs, ys = np.where(self.S==0)
@@ -73,7 +79,8 @@ if __name__ == '__main__':
     tree = Tree()
     node.get_children(tree)
     tree.statistics()
-    print('Upper Bound on Number of Nodes {}'.format(tree.upper_bound))
+    print('Upper Bound on Number of Nodes {}'.format(tree.upper_bound_nodes))    
+    print('Upper Bound on Number of Leaf Nodes {}'.format(tree.upper_bound_leaf))
     print('Wins of player X {}'.format(tree.wins_x))
     print('Wins of player O {}'.format(tree.wins_o))
     print('Draws {}'.format(tree.draws))
