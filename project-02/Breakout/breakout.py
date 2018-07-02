@@ -143,4 +143,4 @@ if __name__ == '__main__':
     plt.bar(-1, games, width=0.2, align='center', label="Played")
     plt.bar(1, games_won, width=0.2, align='center',label="Won")
     plt.legend(loc='upper center')
-    plt.show
+    plt.show()
