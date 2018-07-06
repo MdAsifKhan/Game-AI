@@ -7,6 +7,7 @@ import pygame
 from pygame.locals import *
 import sys
 import time
+import math
 from breakout_sprites import *
 import matplotlib.pyplot as plt
 
@@ -114,10 +115,32 @@ if __name__ == '__main__':
                 ball.speed_x *= 2
                 ball.speed_y *= 2
                 start_time = current_time
-            
-            # move player horizontally
-            player.move(ball.speed_x)
-                    
+
+            ball_position = (ball.rect.x, ball.rect.y)
+            player_position = (player.rect.x, player.rect.y)
+            ball_final_position = (abs(ball.rect.x/ball.speed_x) + ball_position[0], abs(ball.rect.y/ball.speed_y) + ball_position[1])
+            padding = 10
+            player_range = range(player.rect.x + padding, player.rect.width - padding)
+
+            if ball.speed_y > 0 and ball_final_position[0] not in player_range:
+                ball_positions_left = {0: range(0, 30), 1: range(30, 100), 2: range(100, WINDOW_WIDTH)}
+                ball_positions_right = {0: range(0, -30, -1), 1: range(-30, -100, -1), 2: range(-100, -WINDOW_WIDTH, -1)}
+                player_move_left = [-10 , -20, -30]
+                player_move_right = [10, 20, 30]
+
+                ball_distance_to_player = ball.rect.x - player.rect.x
+
+                if ball_distance_to_player >= 0:
+                    satisfied_range = {k: v for (k,v) in ball_positions_left.items() if ball_distance_to_player in v}.popitem()[0]
+                    move = player_move_right[satisfied_range]
+                else:
+                    satisfied_range = {k: v for (k,v) in ball_positions_right.items() if ball_distance_to_player in v}.popitem()[0]
+                    move = player_move_left[satisfied_range]
+
+                new_rect = player.rect.move(move, 0)
+                if new_rect.x > 0 and new_rect.x < (WINDOW_WIDTH - player.rect.width):
+                    player.move(move)
+
             # render background image
             screen.blit(background_image, [0, 0])
             

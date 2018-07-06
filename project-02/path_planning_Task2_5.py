@@ -25,7 +25,12 @@ def create_graph(matrix):
 	r, c, t = index_list.shape
 	for x, y in np.ndindex((r,c)):
 		index_list[x][y] = (y,x)
+
+	print("Index LIST")
+	print(index_list)
+	print("INDEX LIST FLIPPED")
 	index_list = np.flip(index_list, 0)
+	print(index_list)
 
 	# Create mapping to relabel nodes in the graph.
 	mapping = dict()
@@ -57,9 +62,9 @@ def color_map(graph, path, point1, point2):
 
 if __name__== "__main__":
 
-	file = "simpleMap-1-20x20.txt"
+	#file = "simpleMap-1-20x20.txt"
 	# Second graph file to validate logic
-	#file = "simpleMap-4-22x34.txt"
+	file = "simpleMap-4-22x34.txt"
 
 	# Create a matrix.
 	matrix = read_file(file)
