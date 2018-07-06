@@ -1,13 +1,27 @@
 # Game-AI Project-02
 
+## Task 2.1 Game-Tree
+```python  task_2_1.py	```
+## Task 2.2 MiniMax
+```python  task_2_2.py	```
+## Task 2.3 Connect-4
+Change to folder Connect4. Some notes on development contained in dev_notes.txt
+```python  minimax.py	```
+
+## Task 2.4 Breakout
+
+Change to folder Breakout
+```python  breakout.py	```
+
 ## Task 2.5 Path Planning
+```python path_planning_Task2_5.py```
 
 ### Graph Reading
 
 1. Read data into a 2d array.
 2. Create a 2d grid graph using networkx.
-3. Create a mapping  of coordinates in grid graph.
-4. Iterate the graph removing the nodes with values “1”.
+3. Create a mapping  to relabel coordinates  in  the grid graph.
+4. Iteratively  remove nodes with  value  “1”.
 
 ### Functions
 
