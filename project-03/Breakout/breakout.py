@@ -33,7 +33,6 @@ if __name__ == '__main__':
     total_time = 0
 
     fuzzy_control = breakout_fuzzy_control.BreakoutFuzzyControl()
-    fuzzy_control.plot_membership_functions()
 
     #Play game for 100 times
     for i in range (0, games):       
