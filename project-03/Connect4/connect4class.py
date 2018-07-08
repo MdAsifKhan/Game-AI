@@ -160,9 +160,9 @@ class connect4class:
         plt.xlabel('Value')
         plt.ylabel('Frequency')
         plt.legend(loc='upper right')
-        plt.show()
+        #plt.show()
     
-    def collect_stats(self, num_games):
+    def collect_stats(self, num_games, experiment_name='UnnamedExperiment', polt_every_nth=1):
         tt = pausabletimer.PausableTimer()
         for i in range(num_games):
             tt.resume()
@@ -170,56 +170,76 @@ class connect4class:
             self.start_new_game()
             tt.pause()
             
-            # Save results thus far (because some experiments might run very
-            # long and need to be stopt but I'd like to have the results thus far)
-            print(self.wins_losses_draws)
-            self.plot_histogram()
-   
-            # Show progress:
-            '''
-            #Test data for output here:
-            i = 30
-            num_games = 1000
-            tt = pausabletimer
-            tt.t = 42.42432020340202
-            '''
-            games_played = (i+1) / num_games * 100
-            print(str(games_played) + ' % done ( i.e. ' + str(i) + ' games done; ' + str(num_games - i) + ' left to go )')
+            if (i+1) % polt_every_nth == 0:
+                '''
+                Only print and save every once in a while for games that can be 
+                played fast. Save every time or at least more often for games that take very long.
+                '''
+                # SAVING DATA TO FILE:
+                # Save results thus far (because some experiments might run very
+                # long and need to be stopt but I'd like to have the results thus far)
+                print(self.wins_losses_draws)
+                self.plot_histogram()
+                plt.savefig(experiment_name + '_plot'+str(i+1)+'.png')
+                plt.show()
+                
+                average_time_per_game = tt.t / (i+1)
+                eta = (num_games - (i+1)) * average_time_per_game
+                sRed, sYellow, sDraw = self.get_game_score()
+                games_played = (i+1) / num_games * 100
+                
+                std_game = 'Game ' + str(i+1)
+                str_progress = str(games_played) + ' % done ( i.e. ' + str(i) + ' games done; ' + str(num_games - i) + ' left to go; total of ' + str(num_games) + ' games)'
+                str_avgTimePerGame = 'Average time per Game: ' + str(average_time_per_game)
+                str_timeThusFar = 'Time thus far: ' + str(tt.t) + 's or ' + str(tt.t/60/60)+'h'
+                str_eta = 'Estimated time left: ' + str(eta) + 's or ' + str(eta/60/60)+'h'
+                str_score = 'Red: ' + str(sRed) + ' Yellow: ' + str(sYellow) + ' Draw: ' + str(sDraw)
+                 
+                textList = ['\n',std_game ,str_score, str_progress, str_eta, str_avgTimePerGame, str_timeThusFar, str_eta]
+                outF = open(experiment_name  + "_StatsAndData.txt", "a")
+                for line in textList:
+                  # write line to output file
+                  outF.write(line)
+                  outF.write("\n")
+                outF.close()
+                
+                
+                # GIVE USER FEEDBACK ON HOW LONG HE WILL HAVE TO WAIT:
+                # Show progress:
+                '''
+                #Test data for output here:
+                i = 30
+                num_games = 1000
+                tt = pausabletimer
+                tt.t = 42.42432020340202
+                '''
+                
+                print(str_progress)
+                
+                # show eta:
+                average_time_per_game = tt.t / (i+1)
+                print(str_score)
+                print(str_avgTimePerGame)
+                print(str_timeThusFar)
+                print(str_eta)
+                
+                print('---------------------------------------------------------\n\n')
             
-            # show eta:
-            average_time_per_game = tt.t / (i+1)
-            print('Average time per Game: ' + str(average_time_per_game))
-            print('Time thus far: ' + str(tt.t) + 's or ' + str(tt.t/60/60)+'h')
-            eta = (num_games - (i+1)) * average_time_per_game
-            print('Estimated time left: ' + str(eta) + 's')
-            print('---------------------------------------------------------')
-            
+
+def run_experiment(experiment_name='UnnamedExperiment', num_games = 10, players_to_use_MinMax = [], max_depth = [], board_size = [6,7], polt_every_nth=1):
+    start = time.time()
+    model = connect4class(players_to_use_MinMax = players_to_use_MinMax, max_depth = max_depth, board_size = board_size)
+    model.collect_stats(num_games, experiment_name=experiment_name,polt_every_nth=polt_every_nth)
+    end = time.time()
+    str_timeWithPlot = 'Time includig plotting: ' + str(end - start)
+    print(str_timeWithPlot)
+    
+    outF = open(experiment_name + "_StatsAndData.txt", "a")
+    outF.write(str_timeWithPlot)
+    outF.write("\n")
+    outF.close()
     
 if __name__ == '__main__':
-
-    start = time.time()
-    # 3 vs Random
-    model = connect4class(players_to_use_MinMax = [1], max_depth = [2], board_size = [6,7])
-    model.collect_stats(10)
-    end = time.time()
-    print('Time includig plotting: ' + str(end - start))
-
-###############################################################################
-
-    # 3 vs Random
-    #model = connect4class(players_to_use_MinMax = [1], max_depth=[3], board_size = [19,19])
-    #model.collect_stats(1)
-
-    # 3vs1
-    #model = connect4class(players_to_use_MinMax = [1,-1], max_depth=[3,1], board_size = [19,19])
-    #model.collect_stats(1)
-
-    # 3vs2
-    #model = connect4class(players_to_use_MinMax = [1,-1], max_depth=[3,2], board_size = [19,19])
-    #model.collect_stats(1)
-
-    # 3vs3    
-    #model = connect4class(players_to_use_MinMax = [1,-1], board_size = [19,19], max_depth=[3,3])
-    #model.collect_stats(1)
+    run_experiment(experiment_name='UnnamedExperiment', num_games = 10, players_to_use_MinMax = [], max_depth=[], board_size = [6,7])
     
 
