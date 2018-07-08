@@ -38,7 +38,7 @@ class connect4class:
         self.winning_player = []
         self.wins_losses_draws = []
 
-    def __init__(self, players_to_use_MinMax = [1], board_size = [6,7], max_depth = 3):
+    def __init__(self, players_to_use_MinMax = [], board_size = [6,7], max_depth = []):
         # Allocate array for connect4 board of the size given.
         # The traditional size is 6 x 7.
         self.gameState = np.zeros(board_size, dtype=int)
@@ -82,7 +82,12 @@ class connect4class:
     def move_was_winning_move(self):
         return move_was_winning_move(self.gameState)
         
-    def play_next_move(self):
+    def play_next_move(self, debug_print=False):
+            def printif(s,b=True):
+                if b:
+                    print(s)
+            b=debug_print
+            
             # get player symbol
             name = self.symbols[self.player]
 
@@ -96,15 +101,14 @@ class connect4class:
                 player_depth = self.max_depth[self.players_to_use_MinMax.index(self.player)]
                 reward, move = calculate_minmax_move(self.gameState, max_depth=player_depth, player=self.player)
                 self.gameState[move] = self.player
-                print("Player " + name + " moves using MinMax to "
-                      + str(move) + " with reward " + str(reward))
+                printif("Player " + name + " moves using MinMax to "
+                      + str(move) + " with reward " + str(reward),b)
             else: # let player -1 move at random
                 move = self.move_at_random()
-                print("Player " + name + " moves at random to " + str(move))
+                printif("Player " + name + " moves at random to " + str(move),b)
             
-            self.print_game_state()
-            print('\n\n')
-            #move = self.move_at_random()
+            if b: self.print_game_state()
+            printif('\n\n',b)
             
             # evaluate game state
             if self.move_was_winning_move():
@@ -187,18 +191,35 @@ class connect4class:
             print('Average time per Game: ' + str(average_time_per_game))
             print('Time thus far: ' + str(tt.t) + 's or ' + str(tt.t/60/60)+'h')
             eta = (num_games - (i+1)) * average_time_per_game
-            print('Estimated time left: ' + eta)
+            print('Estimated time left: ' + str(eta) + 's')
             print('---------------------------------------------------------')
             
     
 if __name__ == '__main__':
-    #model = connect4class(players_to_use_MinMax = [1], board_size = [6,7])
-    #model.collect_stats(10)
+
     start = time.time()
-#    model = connect4class(players_to_use_MinMax = [1,-1], board_size = [19,19], max_depth=3)
-#    model.collect_stats(1)
+    # 3 vs Random
+    model = connect4class(players_to_use_MinMax = [1], max_depth = [2], board_size = [6,7])
+    model.collect_stats(10)
     end = time.time()
-    print(end - start)
+    print('Time includig plotting: ' + str(end - start))
+
+###############################################################################
+
+    # 3 vs Random
+    #model = connect4class(players_to_use_MinMax = [1], max_depth=[3], board_size = [19,19])
+    #model.collect_stats(1)
+
+    # 3vs1
+    #model = connect4class(players_to_use_MinMax = [1,-1], max_depth=[3,1], board_size = [19,19])
+    #model.collect_stats(1)
+
+    # 3vs2
+    #model = connect4class(players_to_use_MinMax = [1,-1], max_depth=[3,2], board_size = [19,19])
+    #model.collect_stats(1)
+
+    # 3vs3    
+    #model = connect4class(players_to_use_MinMax = [1,-1], board_size = [19,19], max_depth=[3,3])
+    #model.collect_stats(1)
     
-    model = connect4class(players_to_use_MinMax = [1,-1], max_depth=[3,1], board_size = [19,19])
-    model.collect_stats(1)
+

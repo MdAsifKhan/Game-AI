@@ -77,7 +77,7 @@ def rand_argmax(a):
     i = np.random.randint(len(ix))
     return ix[i]
 
-def rewardEstimate(gameState, player, max_depth=4, depth=0):
+def rewardEstimate(gameState, player, max_depth=4, depth=0, debug_print=False):
     '''
     This is the recursive function.
     It returns the 'value' of a gameState and the first move to take
@@ -118,8 +118,9 @@ def rewardEstimate(gameState, player, max_depth=4, depth=0):
                          # make the A.I. less predictable. I.e. it will not do
                          # the same over and over again in a given situation.
             i = rand_argmax(rewards) if player==MAX else rand_argmin(rewards)
-            print(moves)
-            print(rewards)
+            if debug_print:
+                print(moves)
+                print(rewards)
         else: # for the others return the first, because it doesn't matter.
             i = np.argmax(rewards) if player==MAX else np.argmin(rewards)
         reward = rewards[i]

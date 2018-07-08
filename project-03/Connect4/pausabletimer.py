@@ -16,7 +16,7 @@ class PausableTimer:
         
     def pause(self):
         end = time.time()
-        self.total_time = self.t + (end - self.start)
+        self.t = self.t + (end - self.start)
         return self.t
         
     def resume(self):
