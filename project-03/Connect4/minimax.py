@@ -129,7 +129,7 @@ def rewardEstimate(gameState, player, max_depth=4, depth=0):
 
 
 
-def calculate_minmax_move(gameState, max_depth=4, player=1):
+def calculate_minmax_move(gameState, max_depth=3, player=1):
     '''Note: This function assumes gameState to be NOT terminal'''
     # 'player' (1 or -1) is the player to make the next move.
     # TODO: It should work like this if we pass 'player', but we could infer 'player' from the

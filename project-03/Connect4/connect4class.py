@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 from gameState import move_still_possible, move_was_winning_move, possible_moves
 from minimax import calculate_minmax_move
 import time
+import pausabletimer
 
 class connect4class:
     """Models the game Connect 4 on a 6x7 board"""
@@ -18,11 +19,7 @@ class connect4class:
     }
         
     def start_new_game(self):
-        # initialize 6x7 connect 4 board
-        self.gameState = np.zeros((6,7), dtype=int)
-        
-        # to keep track of number of pieces each vertical column
-        self.colScores = np.zeros(7, dtype=int) # TODO: Can this be deleted?
+        self.gameState.fill(0) # empty the board
     
         # initialize player number, move counter
         self.player = 1
@@ -39,17 +36,22 @@ class connect4class:
         self.penultimate_states = []
         self.winning_moves = []
         self.winning_player = []
-        #winning_conf = []
         self.wins_losses_draws = []
 
-    def __init__(self, players_to_use_MinMax = [1], board_size = [6,7]):
-        ## GAME STATE:
-        self.start_new_game()
+    def __init__(self, players_to_use_MinMax = [1], board_size = [6,7], max_depth = 3):
+        # Allocate array for connect4 board of the size given.
+        # The traditional size is 6 x 7.
+        self.gameState = np.zeros(board_size, dtype=int)
         
         # Defines which players use minmax and which move at random:
         self.players_to_use_MinMax = players_to_use_MinMax # can be [], [-1], [1] or [-1,1]
         
-        ## STATISTICAL DATA:
+        # It has as many elements as players_to_use_MinMax, and for each player using 
+        # MinMax it specifies how deep they build their MinMax tree, before a heuristic
+        # is used.
+        self.max_depth = max_depth
+        
+        self.start_new_game()
         self.reset_statistics()
         
     def move_still_possible(self):
@@ -87,8 +89,12 @@ class connect4class:
             # For storing previous game state and move in case of winning move
             prev_gameState = self.gameState
             
-            if (self.player in self.players_to_use_MinMax):  # let player 1 move according to MinMax
-                reward, move = calculate_minmax_move(self.gameState, max_depth=4, player=self.player)
+            if (self.player in self.players_to_use_MinMax):
+                # Player Blue and Player red might not be equally "smart". If both play
+                # MinMax, maybe one grows a tree of depth 1 before using heuristics and
+                # the other grows a tree of depth 3 before using heuristics.
+                player_depth = self.max_depth[self.players_to_use_MinMax.index(self.player)]
+                reward, move = calculate_minmax_move(self.gameState, max_depth=player_depth, player=self.player)
                 self.gameState[move] = self.player
                 print("Player " + name + " moves using MinMax to "
                       + str(move) + " with reward " + str(reward))
@@ -153,19 +159,46 @@ class connect4class:
         plt.show()
     
     def collect_stats(self, num_games):
-        
-        
+        tt = pausabletimer.PausableTimer()
         for i in range(num_games):
+            tt.resume()
             self.play()
             self.start_new_game()
-        
-        print(self.wins_losses_draws)
-        self.plot_histogram()
+            tt.pause()
+            
+            # Save results thus far (because some experiments might run very
+            # long and need to be stopt but I'd like to have the results thus far)
+            print(self.wins_losses_draws)
+            self.plot_histogram()
    
+            # Show progress:
+            '''
+            #Test data for output here:
+            i = 30
+            num_games = 1000
+            tt = pausabletimer
+            tt.t = 42.42432020340202
+            '''
+            games_played = (i+1) / num_games * 100
+            print(str(games_played) + ' % done ( i.e. ' + str(i) + ' games done; ' + str(num_games - i) + ' left to go )')
+            
+            # show eta:
+            average_time_per_game = tt.t / (i+1)
+            print('Average time per Game: ' + str(average_time_per_game))
+            print('Time thus far: ' + str(tt.t) + 's or ' + str(tt.t/60/60)+'h')
+            eta = (num_games - (i+1)) * average_time_per_game
+            print('Estimated time left: ' + eta)
+            print('---------------------------------------------------------')
+            
+    
 if __name__ == '__main__':
     #model = connect4class(players_to_use_MinMax = [1], board_size = [6,7])
     #model.collect_stats(10)
+    start = time.time()
+#    model = connect4class(players_to_use_MinMax = [1,-1], board_size = [19,19], max_depth=3)
+#    model.collect_stats(1)
+    end = time.time()
+    print(end - start)
     
-    model = connect4class(players_to_use_MinMax = [1,-1], board_size = [19,19])
-    model.collect_stats(10)
-    
+    model = connect4class(players_to_use_MinMax = [1,-1], max_depth=[3,1], board_size = [19,19])
+    model.collect_stats(1)
