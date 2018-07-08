@@ -34,7 +34,7 @@ class BreakoutFuzzyControl:
         # Player steps in range 0, 20.
         self.player_steps = ctrl.Consequent(self.step_range, 'player_steps')
 
-        # Fuzzify
+        # Generate fuzzy membership functions
         self.ball_distance['close'] = fuzz.trimf(self.ball_distance.universe, self.close)
         self.ball_distance['far'] = fuzz.trimf(self.ball_distance.universe, self.far)
         self.ball_distance['very_far'] = fuzz.trimf(self.ball_distance.universe, self.very_far)
@@ -89,3 +89,88 @@ class BreakoutFuzzyControl:
 
         plt.tight_layout()
         plt.show()
+
+    # Plots defuzzification result.
+    def plot_defuzzification(self, input_ball_distance):
+
+        # Membership functions
+        ball_distance_close = fuzz.trimf(self.ball_distance.universe, self.close)
+        ball_distance_far = fuzz.trimf(self.ball_distance.universe, self.far)
+        ball_distance_very_far = fuzz.trimf(self.ball_distance.universe, self.very_far)
+        ball_distance_too_far = fuzz.trimf(self.ball_distance.universe, self.too_far)
+
+        player_steps_little_step = fuzz.trimf(self.player_steps.universe, self.little_step)
+        player_steps_mid_step = fuzz.trimf(self.player_steps.universe, self.mid_step)
+        player_steps_big_step = fuzz.trimf(self.player_steps.universe, self.big_step)
+        player_steps_extreme_step = fuzz.trimf(self.player_steps.universe, self.extreme_step)
+
+        # Activation of Fuzzy membership functions
+        ball_distance_is_close = fuzz.interp_membership(self.distance_range, ball_distance_close, input_ball_distance)
+        ball_distance_is_far = fuzz.interp_membership(self.distance_range, ball_distance_far, input_ball_distance)
+        ball_distance_is_very_far = fuzz.interp_membership(self.distance_range, ball_distance_very_far, input_ball_distance)
+        ball_distance_is_too_far = fuzz.interp_membership(self.distance_range, ball_distance_too_far, input_ball_distance)
+
+        # Apply rules.
+        active_rule1 = ball_distance_is_close
+        active_rule2 = ball_distance_is_far
+        active_rule3 = ball_distance_is_very_far
+        active_rule4 = ball_distance_is_too_far
+
+        player_steps_activation_little_step = np.fmax(active_rule1, player_steps_little_step)
+        player_steps_activation_mid_step = np.fmax(active_rule2, player_steps_mid_step)
+        player_steps_activation_big_step = np.fmax(active_rule3, player_steps_big_step)
+        player_steps_activation_extreme_step = np.fmax(active_rule4, player_steps_extreme_step)
+
+        # Aggregate all four output membership functions together
+        aggregated = np.fmax(player_steps_activation_little_step, 
+            np.fmax(player_steps_activation_mid_step, 
+                np.fmax(player_steps_activation_big_step, player_steps_activation_extreme_step)))
+
+        # Calculate defuzzified result
+        player_steps = fuzz.defuzz(self.step_range, aggregated, 'centroid')
+        player_steps_activation = fuzz.interp_membership(self.step_range, aggregated, player_steps)
+
+        # Visualize
+        fig, ax0 = plt.subplots(figsize=(8, 3))
+        player_steps0 = np.zeros_like(self.step_range)
+
+        ax0.plot(self.step_range, player_steps_little_step, 'b', linewidth=0.5, linestyle='--', )
+        ax0.plot(self.step_range, player_steps_mid_step, 'g', linewidth=0.5, linestyle='--')
+        ax0.plot(self.step_range, player_steps_big_step, 'r', linewidth=0.5, linestyle='--')
+        ax0.fill_between(self.step_range, player_steps0, aggregated, facecolor='Orange', alpha=0.7)
+        ax0.plot([player_steps, player_steps], [0, player_steps_activation], 'k', linewidth=1.5, alpha=0.9)
+        ax0.set_title('Aggregated membership and result (line)')
+
+        # Turn off top/right axes
+        for ax in (ax0,):
+            ax.spines['top'].set_visible(False)
+            ax.spines['right'].set_visible(False)
+            ax.get_xaxis().tick_bottom()
+            ax.get_yaxis().tick_left()
+
+        plt.tight_layout()
+        plt.show()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
