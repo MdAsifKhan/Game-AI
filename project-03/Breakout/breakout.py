@@ -10,12 +10,13 @@ import time
 import math
 from breakout_sprites import *
 import matplotlib.pyplot as plt
-
+import skfuzzy.control as ctrl
+import skfuzzy as fuzz
+import breakout_fuzzy_control
 
 def text_objects(text, font):
     textSurface = font.render(text, True, white)
     return textSurface, textSurface.get_rect()
-
 
 def message_display(text):
     largeText = pygame.font.Font('freesansbold.ttf',50)
@@ -30,6 +31,9 @@ if __name__ == '__main__':
     games = 100
     games_won = 0
     total_time = 0
+
+    fuzzy_control = breakout_fuzzy_control.BreakoutFuzzyControl()
+    fuzzy_control.plot_membership_functions()
 
     #Play game for 100 times
     for i in range (0, games):       
@@ -53,7 +57,7 @@ if __name__ == '__main__':
         bricks_group = pygame.sprite.Group()
         
         # add sprites to their group
-        ball = Ball('ball.png', BALL_SPEED, -BALL_SPEED)
+        ball = Ball('ball.png', BALL_SPEED + 4, -BALL_SPEED - 4)
         all_sprites_group.add(ball)
         
         player = Player('player.png', BALL_SPEED)
@@ -96,7 +100,7 @@ if __name__ == '__main__':
             # collision detection (ball bounce against brick & player)
             hits = pygame.sprite.spritecollide(ball, player_bricks_group, False)
             if hits:
-                sound.play()
+                #sound.play()
                 hit_rect = hits[0].rect
                 # bounce the ball (according to side collided)
                 if hit_rect.left > ball.rect.left or ball.rect.right < hit_rect.right:
@@ -116,30 +120,17 @@ if __name__ == '__main__':
                 ball.speed_y *= 2
                 start_time = current_time
 
-            ball_position = (ball.rect.x, ball.rect.y)
-            player_position = (player.rect.x, player.rect.y)
-            ball_final_position = (abs(ball.rect.x/ball.speed_x) + ball_position[0], abs(ball.rect.y/ball.speed_y) + ball_position[1])
-            padding = 10
-            player_range = range(player.rect.x + padding, player.rect.width - padding)
+            # Only move when ball is coming down. 
+            if ball.speed_y > 0:
+                # Distance between the player and the ball.
+                distance = player.rect.x - ball.rect.x
+                # Initialize with absolute distance.
+                fuzzy_control.compute(abs(distance))
+                # Get steps needed to move.
+                steps = fuzzy_control.output()
 
-            if ball.speed_y > 0 and ball_final_position[0] not in player_range:
-                ball_positions_left = {0: range(0, 30), 1: range(30, 100), 2: range(100, WINDOW_WIDTH)}
-                ball_positions_right = {0: range(0, -30, -1), 1: range(-30, -100, -1), 2: range(-100, -WINDOW_WIDTH, -1)}
-                player_move_left = [-10 , -20, -30]
-                player_move_right = [10, 20, 30]
-
-                ball_distance_to_player = ball.rect.x - player.rect.x
-
-                if ball_distance_to_player >= 0:
-                    satisfied_range = {k: v for (k,v) in ball_positions_left.items() if ball_distance_to_player in v}.popitem()[0]
-                    move = player_move_right[satisfied_range]
-                else:
-                    satisfied_range = {k: v for (k,v) in ball_positions_right.items() if ball_distance_to_player in v}.popitem()[0]
-                    move = player_move_left[satisfied_range]
-
-                new_rect = player.rect.move(move, 0)
-                if new_rect.x > 0 and new_rect.x < (WINDOW_WIDTH - player.rect.width):
-                    player.move(move)
+                # Determine direction (Left/Right) and move the player. 
+                player.move(steps) if distance < 0 else player.move(-steps)
 
             # render background image
             screen.blit(background_image, [0, 0])
