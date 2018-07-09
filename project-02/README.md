@@ -1,20 +1,30 @@
-# Game-AI Project-02
+# Project-02
+
+In this project we implement game trees and path planning algorithm.
 
 ## Task 2.1 Game-Tree
+In this task we grow the complete game tree for Tic-Tac-Toe and do the combinatorial analysis for the upper bound on number of nodes and leaves.
+We also computed game statistics to understand winning situations. 
 ```python  task_2_1.py	```
 ## Task 2.2 MiniMax
+In this task we implemented MiniMax search for simple trees with utility defined for leaf nodes.
+
 ```python  task_2_2.py	```
+
 ## Task 2.3 Connect-4
-Change to folder Connect4. Some notes on development contained in dev_notes.txt
+In this task we implemented minimax search for connect four. Change to folder Connect4. Some notes on development contained in dev_notes.txt
+
 ```python  minimax.py	```
 
 ## Task 2.4 Breakout
+In this task we implemented mechanics of breakout. Further we implemented a simple controller which uses coordinates of ball to move the paddle.Change to folder Breakout.
 
-Change to folder Breakout
 ```python  breakout.py	```
 
 ## Task 2.5 Path Planning
-```python path_planning_Task2_5.py```
+In this task we realize two algorithms namely: A* and Dijkstra's for the problem of path planning on grid graph. We use it for 2D game map.
+
+Game map consists of 0's and 1's, where 0 is location where player can be and 1 represents wall. We convert map to grid graph in simple four steps.
 
 ### Graph Reading
 
@@ -23,16 +33,11 @@ Change to folder Breakout
 3. Create a mapping  to relabel coordinates  in  the grid graph.
 4. Iteratively  remove nodes with  value  “1”.
 
-### Functions
+```python path_planning_Task2_5.py```
 
-***read_file(path)***  
-Reads the graph from a file into a 2D array.
 
-***create_graph(matrix)***  
-Creates the graph using networkx and 2D array created from the file.
-
-***dist(point1, point2)***  
-Calculates the euclidean distance between two nodes in a graph.
-
-***color_map(graph, path, point1, point2)***  
-Returns a color map for the graph.
+## Requirements
+* [PyGame](https://www.pygame.org/news)
+* Networkx
+* Graphviz
+* Python3+

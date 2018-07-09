@@ -1,119 +1,51 @@
-# Game-AI Project-01
+# Project-01
 
-Description of functions used in the tasks.
+In this project we implement simple strategies for turn based games.
 
-## Task 1.1: Acquaint yourself with python / numpy:
-No functions implemented.
+## Task 1.1: Probabilistic Strategy for player 'X' in Tic-Tac-Toe. We implement it in easy 4 steps:
+* Play a tournament of 1000 games where ‘X’ and ‘O’ moves randomly.
+* Determine count of winning field of ‘X’ and ‘O’.
+* Normalize count to obtain probabilities.
+* Move ‘X’ with probabilities obtain in Step-3 and ‘O’ uniformly at randomly.
 
-## Task 1.2: Simple strategies for tic tac toe:
+```python tic-tac-toe_Task1-2.py ```
 
-### Task 1.2.1 Implement a probabilistic strategy:
+## Task 1.2: Implement simple heuristiic to decide move of player 'X' in Tic-Tac-Toe.
 
-```python
-#Plays tic tac toe randomly.
-def playGameRandomly(player)
-```
+We implement following heuristic:
 
-```python
-#Plays a tournament of 1000 tic tac toe games with random moves.
-def randomTournament(start_player)
-```
+First we define criteria and measure of winning.
+* Reward: Consecutive 1's either row, column or diagonal wise.
+* Winning Situation: Reward of ‘3’.
 
-```python
-#Determine probabilites for states that contributed to a win.
-def determineWinMoveProbabilites(counts_x, counts_o)
-```
+Steps to find auspicious move for player ‘X’.
 
-```python
-#Writes probabilities to a file.
-def writeProbabilitiesToFile(probabilities_x, probabilities_o, file)
-```
-
-```python
-#Determines the next move using the probabilites.
-def moveWithBestProbability(gameState, probabilities)
-```
-
-```python
-#Plays tic tac toe with winning probabilites.
-def playGameWithWinningProbabilities(probabilities)
-```
-
-```python
-#Plays a tournament of 1000 games, using winning probabilites for x while o moves randomly.
-def winningProbabilitiesTournament(probabilistic_player, file)
-```
-
-### Task 1.2.2. Implement a heuristic strategy:
-
-```python
-#Find score of 'X' and 'O' if player 'p'='X' makes move at location x,y
-def score(S,x,y,p)
-```
-
-```python
-#Evaluate all possible position and find best move for player P, here P is 'X'
-def best_move(S, p)
-```
-
-```python
-#Determines next move with heuristic strategy.
-def move_heuristic(S, p)
-```
-
-```python
-#Plays tic tac toe with heuristic strategy.
-def play_game_heuristic(start_player)
-```
-
-```python
-#Plays a tournament of 1000 games with heuristic strategy.
-def heuristic_tournament(start_player=1, number_games=1000)
-```
-
-```python
-#Plotting Histogram
-def plot_histogram(game_result, title, figure)
-```
-
-## Task 1.3: Connect four:
-
-```python
-#Checks if move is possible using the current game state.
-def move_still_possible(S)
-```
-
-```python
-#Determines next move randomly for the provided player in the current game state.
-def move_at_random(S, F, p)
-```
-
-```python
-#Prints provided game state.
-def print_game_state(S)
-```
-
-```python
-#Checks if move resulted into a win.
-def move_was_winning_move(S, p)
-```
-
-```python
-#Plays Connect 4.
-def play()
-```
-
-```python
-#Plots Histogram of wins and loses.
-def plot_histogram(game_result)
-```
-
-```python
-#Collect statistics.
-def collect_stats()
-```
-
-## Task 1.4: Breakout:
-No functions implemented.
+* For every empty field check if it can result in a winning situation of player ‘X’.
+	IF True, location of field is an auspicious move. Break! ELSE, Continue to Step 2. 
+* For every empty field check if it can result in a winning situation of player ‘O’.
+	IF True, location of field is an auspicious move. Break! ELSE, Continue to Step 3.
+* Find empty field which can result in a maximum reward of player ‘X’.
+	IF more than 1, Field where reward of ‘X’ is greater than ‘O’ is an auspicious move.
+	ELSE, Location of field is an auspicious move.
 
 
+```python tic_tac_toe.py```
+
+
+
+## Task 1.3: Implement mechanics of Connect four.
+
+Game Mechanics for connect 4:
+* Red always starts first.
+* A counter is kept to keep track of number of dices filled in every column.
+* The player in turn chooses a unfilled column randomly.
+* Winning condition:
+	Whether the horizontal rows have similar consecutive dices > 4.
+	Whether the vertical columns have similar consecutive dices > 4.
+	Whether the diagonals with size > 4 have similar consecutive dices > 4.
+
+```python connect4.py```
+
+## Requirements
+* [PyGame](https://www.pygame.org/news)
+* Python3+
