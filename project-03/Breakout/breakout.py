@@ -28,7 +28,7 @@ def message_display(text):
 
 if __name__ == '__main__':
 
-    games = 100
+    games = 1
     games_won = 0
     total_time = 0
 
