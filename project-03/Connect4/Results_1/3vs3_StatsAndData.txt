@@ -1,0 +1,234 @@
+
+
+Game 1
+Red: 0 Yellow: 1 Draw: 0
+0.01 % done ( i.e. 0 games done; 10000 left to go; total of 10000 games)
+Estimated time left: 20377915.725197554s or 5660.532145888209h
+Average time per Game: 2037.995372056961
+Time thus far: 2037.995372056961s or 0.566109825571378h
+Estimated time left: 20377915.725197554s or 5660.532145888209h
+
+
+Game 2
+Red: 1 Yellow: 1 Draw: 0
+0.02 % done ( i.e. 1 games done; 9999 left to go; total of 10000 games)
+Estimated time left: 25641504.1624341s or 7122.640045120584h
+Average time per Game: 2564.6633489131927
+Time thus far: 5129.3266978263855s or 1.4248129716184403h
+Estimated time left: 25641504.1624341s or 7122.640045120584h
+
+
+Game 3
+Red: 2 Yellow: 1 Draw: 0
+0.03 % done ( i.e. 2 games done; 9998 left to go; total of 10000 games)
+Estimated time left: 25537310.270701252s or 7093.697297417015h
+Average time per Game: 2554.49737628301
+Time thus far: 7663.4921288490295s or 2.128747813569175h
+Estimated time left: 25537310.270701252s or 7093.697297417015h
+
+
+Game 4
+Red: 3 Yellow: 1 Draw: 0
+0.04 % done ( i.e. 3 games done; 9997 left to go; total of 10000 games)
+Estimated time left: 25850936.720936537s or 7180.815755815705h
+Average time per Game: 2586.128123342991
+Time thus far: 10344.512493371964s or 2.873475692603323h
+Estimated time left: 25850936.720936537s or 7180.815755815705h
+
+
+Game 5
+Red: 3 Yellow: 2 Draw: 0
+0.05 % done ( i.e. 4 games done; 9996 left to go; total of 10000 games)
+Estimated time left: 25646730.938653708s or 7124.091927403807h
+Average time per Game: 2565.9560719013216
+Time thus far: 12829.780359506607s or 3.5638278776407244h
+Estimated time left: 25646730.938653708s or 7124.091927403807h
+
+
+Game 6
+Red: 4 Yellow: 2 Draw: 0
+0.06 % done ( i.e. 5 games done; 9995 left to go; total of 10000 games)
+Estimated time left: 25722918.698049307s or 7145.255193902585h
+Average time per Game: 2573.8361715078354
+Time thus far: 15443.017029047012s or 4.2897269525130595h
+Estimated time left: 25722918.698049307s or 7145.255193902585h
+
+
+Game 7
+Red: 5 Yellow: 2 Draw: 0
+0.06999999999999999 % done ( i.e. 6 games done; 9994 left to go; total of 10000 games)
+Estimated time left: 25067670.930563964s or 6963.241925156657h
+Average time per Game: 2508.5230591978348
+Time thus far: 17559.661414384842s or 4.877683726218011h
+Estimated time left: 25067670.930563964s or 6963.241925156657h
+
+
+Game 8
+Red: 6 Yellow: 2 Draw: 0
+0.08 % done ( i.e. 7 games done; 9993 left to go; total of 10000 games)
+Estimated time left: 24271421.804722548s or 6742.06161242293h
+Average time per Game: 2429.08544883132
+Time thus far: 19432.68359065056s or 5.3979676640696h
+Estimated time left: 24271421.804722548s or 6742.06161242293h
+
+
+Game 9
+Red: 6 Yellow: 3 Draw: 0
+0.09 % done ( i.e. 8 games done; 9992 left to go; total of 10000 games)
+Estimated time left: 24235982.691458013s or 6732.217414293892h
+Average time per Game: 2425.781472471025
+Time thus far: 21832.033252239227s or 6.064453681177564h
+Estimated time left: 24235982.691458013s or 6732.217414293892h
+
+
+Game 10
+Red: 7 Yellow: 3 Draw: 0
+0.1 % done ( i.e. 9 games done; 9991 left to go; total of 10000 games)
+Estimated time left: 23944530.44414735s or 6651.258456707596h
+Average time per Game: 2396.849894309044
+Time thus far: 23968.49894309044s or 6.657916373080678h
+Estimated time left: 23944530.44414735s or 6651.258456707596h
+
+
+Game 11
+Red: 8 Yellow: 3 Draw: 0
+0.11 % done ( i.e. 10 games done; 9990 left to go; total of 10000 games)
+Estimated time left: 24797549.145051565s or 6888.208095847657h
+Average time per Game: 2482.485648718747
+Time thus far: 27307.34213590622s or 7.585372815529506h
+Estimated time left: 24797549.145051565s or 6888.208095847657h
+
+
+Game 12
+Red: 8 Yellow: 4 Draw: 0
+0.12 % done ( i.e. 11 games done; 9989 left to go; total of 10000 games)
+Estimated time left: 24643852.87669102s or 6845.514687969728h
+Average time per Game: 2467.3461029926934
+Time thus far: 29608.153235912323s or 8.224487009975645h
+Estimated time left: 24643852.87669102s or 6845.514687969728h
+
+
+Game 13
+Red: 9 Yellow: 4 Draw: 0
+0.13 % done ( i.e. 12 games done; 9988 left to go; total of 10000 games)
+Estimated time left: 24841368.927218914s or 6900.38025756081h
+Average time per Game: 2487.3704743385315
+Time thus far: 32335.81616640091s or 8.982171157333587h
+Estimated time left: 24841368.927218914s or 6900.38025756081h
+
+
+Game 14
+Red: 10 Yellow: 4 Draw: 0
+0.13999999999999999 % done ( i.e. 13 games done; 9987 left to go; total of 10000 games)
+Estimated time left: 24825817.187373772s or 6896.0603298260485h
+Average time per Game: 2486.062205825533
+Time thus far: 34804.870881557465s or 9.668019689321518h
+Estimated time left: 24825817.187373772s or 6896.0603298260485h
+
+
+Game 15
+Red: 10 Yellow: 5 Draw: 0
+0.15 % done ( i.e. 14 games done; 9986 left to go; total of 10000 games)
+Estimated time left: 24657316.04921071s or 6849.2544581140855h
+Average time per Game: 2469.435758558909
+Time thus far: 37041.53637838364s or 10.28931566066212h
+Estimated time left: 24657316.04921071s or 6849.2544581140855h
+
+
+Game 16
+Red: 11 Yellow: 5 Draw: 0
+0.16 % done ( i.e. 15 games done; 9985 left to go; total of 10000 games)
+Estimated time left: 24914508.682056427s or 6920.696856126785h
+Average time per Game: 2495.4435779303312
+Time thus far: 39927.0972468853s or 11.090860346357028h
+Estimated time left: 24914508.682056427s or 6920.696856126785h
+
+
+Game 17
+Red: 12 Yellow: 5 Draw: 0
+0.16999999999999998 % done ( i.e. 16 games done; 9984 left to go; total of 10000 games)
+Estimated time left: 24434024.180211596s or 6787.2289389476655h
+Average time per Game: 2447.563275589662
+Time thus far: 41608.57568502426s or 11.557937690284517h
+Estimated time left: 24434024.180211596s or 6787.2289389476655h
+
+
+Game 18
+Red: 13 Yellow: 5 Draw: 0
+0.18 % done ( i.e. 17 games done; 9983 left to go; total of 10000 games)
+Estimated time left: 24404791.133292463s or 6779.108648136796h
+Average time per Game: 2444.8798971441056
+Time thus far: 44007.8381485939s or 12.224399485720529h
+Estimated time left: 24404791.133292463s or 6779.108648136796h
+
+
+Game 19
+Red: 14 Yellow: 5 Draw: 0
+0.19 % done ( i.e. 18 games done; 9982 left to go; total of 10000 games)
+Estimated time left: 24457029.099695772s or 6793.619194359937h
+Average time per Game: 2450.358591293034
+Time thus far: 46556.81323456764s or 12.932448120713234h
+Estimated time left: 24457029.099695772s or 6793.619194359937h
+
+
+Game 20
+Red: 15 Yellow: 5 Draw: 0
+0.2 % done ( i.e. 19 games done; 9981 left to go; total of 10000 games)
+Estimated time left: 24332368.58944726s or 6758.99127484646h
+Average time per Game: 2438.113085114956
+Time thus far: 48762.26170229912s or 13.545072695083089h
+Estimated time left: 24332368.58944726s or 6758.99127484646h
+
+
+Game 21
+Red: 16 Yellow: 5 Draw: 0
+0.21 % done ( i.e. 20 games done; 9980 left to go; total of 10000 games)
+Estimated time left: 24391947.797339097s or 6775.541054816416h
+Average time per Game: 2444.32786825725
+Time thus far: 51330.88523340225s or 14.258579231500626h
+Estimated time left: 24391947.797339097s or 6775.541054816416h
+
+
+Game 22
+Red: 17 Yellow: 5 Draw: 0
+0.22 % done ( i.e. 21 games done; 9979 left to go; total of 10000 games)
+Estimated time left: 24181992.951303396s or 6717.220264250943h
+Average time per Game: 2423.5310634699736
+Time thus far: 53317.68339633942s or 14.810467610094284h
+Estimated time left: 24181992.951303396s or 6717.220264250943h
+
+
+Game 23
+Red: 18 Yellow: 5 Draw: 0
+0.22999999999999998 % done ( i.e. 22 games done; 9978 left to go; total of 10000 games)
+Estimated time left: 24116865.892172255s or 6699.129414492292h
+Average time per Game: 2417.2462556051173
+Time thus far: 55596.663878917694s or 15.443517744143804h
+Estimated time left: 24116865.892172255s or 6699.129414492292h
+
+
+Game 24
+Red: 19 Yellow: 5 Draw: 0
+0.24 % done ( i.e. 23 games done; 9977 left to go; total of 10000 games)
+Estimated time left: 24315867.729613148s or 6754.407702670319h
+Average time per Game: 2437.436620851358
+Time thus far: 58498.47890043259s or 16.249577472342384h
+Estimated time left: 24315867.729613148s or 6754.407702670319h
+
+
+Game 25
+Red: 20 Yellow: 5 Draw: 0
+0.25 % done ( i.e. 24 games done; 9976 left to go; total of 10000 games)
+Estimated time left: 24648374.931220293s or 6846.770814227859h
+Average time per Game: 2471.015030698776
+Time thus far: 61775.375767469406s or 17.159826602074833h
+Estimated time left: 24648374.931220293s or 6846.770814227859h
+
+
+Game 26
+Red: 21 Yellow: 5 Draw: 0
+0.26 % done ( i.e. 25 games done; 9975 left to go; total of 10000 games)
+Estimated time left: 24479566.445871886s or 6799.879568297746h
+Average time per Game: 2454.337923187476
+Time thus far: 63812.786002874374s or 17.725773889687325h
+Estimated time left: 24479566.445871886s or 6799.879568297746h
