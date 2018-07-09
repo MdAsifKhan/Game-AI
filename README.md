@@ -8,7 +8,8 @@ This repository implements course projects as a part of Game-AI lecture offered 
 * [Project-02: Game Trees and Path Planning](https://gitlab.com/MdAsifKhan/Game-AI/tree/master/project-02)
 * [Project-02: Behavior Programming](https://gitlab.com/MdAsifKhan/Game-AI/tree/master/project-03)
 
-## Please use the issue tracker for reporting problems and suggesting improvements. Feel free to submit pull request for improvement of exercise.
+## Feedback
+Please use the issue tracker for reporting problems and suggesting improvements.
 
 ## Authors
 

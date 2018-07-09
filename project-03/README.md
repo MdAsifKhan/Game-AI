@@ -43,6 +43,7 @@ Our implementation consists of following methods.
 clustering: Cluster location data into 'l' states using SOM Weights
 learning1: Compute joint probability of location and action state using bayesian learning.
 learning2: Use conditional probabilites with 2nd order markov dependency to plan trajectory. 
+
 ```python  task_4.py	```
 
 
