@@ -2,16 +2,38 @@ import numpy as np
 from matplotlib import pyplot as plt
 from mpl_toolkits import mplot3d
 import pandas as pd
+from scipy.linalg import svd
+import pdb
+from sklearn.cluster import KMeans
 
 class SOM:
 
-    def __init__(self, data, nodes=50, t_max=200):
+    def __init__(self, data, nodes=50, t_max=200, init='random'):
         self.data = data
         self.t_max = t_max
         self.nodes = nodes
         self.eta = 1
         self.sigma = np.exp(1./t_max)
-        self.weight = self.data[np.random.randint(data.shape[0],size=self.nodes),:]
+        self.weight = np.zeros((self.nodes,data.shape[1]))
+        self.weight_init(init)
+
+    def weight_init(self, init='random'):
+        if init== 'random':
+            self.weight = self.data[np.random.randint(self.data.shape[0],size=self.nodes),:]
+        elif init == 'pca':
+            U, s, Vh = svd(self.data, full_matrices=False)
+            U = U[:,:1]
+            s = s[:1]
+            Vh = Vh[:1,:]
+            smat = np.diag(s)
+            low_rank = np.dot(U, np.dot(smat, Vh))
+            np.allclose(self.data, np.dot(U, np.dot(smat, Vh)))
+            self.weight = low_rank[np.random.randint(self.data.shape[0],size=self.nodes),:]          
+        
+        elif init == 'kmeans':
+            model = KMeans(n_clusters=self.nodes, init='random')
+            model.fit(self.data)
+            self.weight = model.cluster_centers_            
 
     def topological_distance(self, v_i):
         # length of shortest path with circular topology
@@ -68,6 +90,21 @@ class SOM:
             plt.pause(.0001)
         return plt
 
+    def evaluate(self):
+        dist_mat = [np.linalg.norm(self.weight-x, axis=1) for x in self.data]
+        sort_mat = [np.argsort(row) for row in dist_mat]
+        quant_error = 0
+        topological_error = 0
+        for sort_idx,dist in zip(sort_mat, dist_mat):
+            bmu_1, bmu_2 = sort_idx[0], sort_idx[1]
+            quant_error += dist[bmu_1]
+            if abs(bmu_1-bmu_2)>1:  
+                topological_error += 1       
+        quant_error = quant_error/len(dist_mat)
+        topological_error = topological_error/len(dist_mat)
+        print('Quantization Error {:}'.format(quant_error))
+        print('Topological Error {:}'.format(topological_error))
+
 if __name__ == '__main__':
     data1 = np.loadtxt(open('q3dm1-path1.csv', 'rb'), delimiter=',')
     data2 = np.loadtxt(open('q3dm1-path2.csv', 'rb'), delimiter=',')
@@ -76,14 +113,17 @@ if __name__ == '__main__':
     t_max = 100
     # SOM for trajectory 1
     print('SOM for trajectory 1')
-    som_ = SOM(data1, nodes, t_max)
+    init = 'random'
+    som_ = SOM(data1, nodes, t_max, init)
     plt1 = som_.som()
+    som_.evaluate()
     som_.save_weights('q3dm1_path1_weights.csv')
-
+    pdb.set_trace()
     # SOM for trajectory 2
     print('SOM for trajectory 2')
-    som_ = SOM(data2, nodes, t_max)
+    som_ = SOM(data2, nodes, t_max, init)
     plt2 = som_.som()
+    som_.evaluate()
     som_.save_weights('q3dm1_path2_weights.csv')
 
     plt1.show()

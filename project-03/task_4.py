@@ -121,9 +121,9 @@ class ImitationLearning:
 		fig = plt.figure()
 		ax = p3.Axes3D(fig)
 		ax.view_init(elev=50, azim=-45)
-		ax.plot(self.x[:,0], self.x[:,1], self.x[:,2], 'b-*', alpha=0.2)
-		ax.scatter(self.trajectory[0,0], self.trajectory[0,1], self.trajectory[0,2], 'g', alpha=1)		
-		ax.plot(self.trajectory[:,0], self.trajectory[:,1], self.trajectory[:,2], 'g-')
+		ax.scatter3D(self.x[:,0], self.x[:,1], self.x[:,2], c='purple', marker='o', s=1)
+		ax.scatter(self.trajectory[0,0], self.trajectory[0,1], self.trajectory[0,2], 'r', alpha=1)		
+		ax.plot(self.trajectory[:,0], self.trajectory[:,1], self.trajectory[:,2], 'r-o', alpha=0.5)
 		fig.savefig(filename)
 		plt.show()
 
